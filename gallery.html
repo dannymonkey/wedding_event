@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 防止搜尋引擎索引 -->
+    <meta name="robots" content="noindex, nofollow">
+    <title>精彩搶先看 - Couple's Wedding</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">婚禮資訊 (Home)</a></li>
+                <li><a href="about.html">關於我們 (About)</a></li>
+                <li><a href="rsvp.html">報名與電子喜帖 (RSVP)</a></li>
+                <li><a href="gallery.html" class="active">精彩搶先看 (Gallery)</a></li>
+                <li><a href="seating.html">當日座位表 (Seating)</a></li>
+            </ul>
+        </nav>
+        <h1 class="couple-names">Couple Name</h1>
+        <p>精彩搶先看</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>婚紗照 (Wedding Photos)</h2>
+            <p>這是我們的婚紗照，與您分享我們的喜悅。</p>
+
+            <!-- 
+                照片設定方式:
+                請開啟 js/gallery.js 檔案，將您的 Google Drive 照片 ID 填入 galleryImages 陣列中。
+                系統會自動讀取並顯示於下方。
+            -->
+            <div id="gallery-container" class="gallery-grid">
+                <!-- 圖片將由 JavaScript 自動產生 -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 <span class="couple-names">Couple Name</span></p>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/gallery.js"></script>
+</body>
+</html>
