@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 防止搜尋引擎索引 -->
+    <meta name="robots" content="noindex, nofollow">
+    <title>報名與電子喜帖 - Couple's Wedding</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">婚禮資訊 (Home)</a></li>
+                <li><a href="about.html">關於我們 (About)</a></li>
+                <li><a href="rsvp.html" class="active">報名與電子喜帖 (RSVP)</a></li>
+                <li><a href="gallery.html">精彩搶先看 (Gallery)</a></li>
+                <li><a href="seating.html">當日座位表 (Seating)</a></li>
+            </ul>
+        </nav>
+        <h1 class="couple-names">Couple Name</h1>
+        <p>報名與電子喜帖</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>電子喜帖 (E-Invitation)</h2>
+            <p>這裡將會放置電子喜帖的內容。</p>
+        </section>
+
+        <section class="rsvp-container">
+            <h2>報名表單 (RSVP Form)</h2>
+            <p>請填寫下方的報名表單，讓我們知道您是否能來參加！</p>
+            <div class="form-wrapper">
+                <!-- 步驟：
+                     1. 建立 Google 表單
+                     2. 點選「傳送」>「<>」(嵌入 HTML)
+                     3. 複製 iframe 程式碼並貼在下方
+                -->
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfDxxxxxxxxxxxxxxxxxxxx/viewform?embedded=true" width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0">載入中…</iframe>
+            </div>
+        </section>
+
+        <section class="check-rsvp-container">
+            <h2>查詢報名狀態 (Check RSVP Status)</h2>
+            <p>不確定是否報名成功嗎？輸入姓名或 Email 查詢看看！</p>
+            
+            <div class="search-box">
+                <input type="text" id="rsvp-guest-name" placeholder="請輸入您的姓名或 Email (Name or Email)">
+                <button id="rsvp-search-btn">查詢 (Search)</button>
+            </div>
+            <div id="rsvp-search-result" class="search-result"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 <span class="couple-names">Couple Name</span></p>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/rsvp.js"></script>
+</body>
+</html>

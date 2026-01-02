@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 防止搜尋引擎索引 (Prevent Search Engines from indexing this site) -->
+    <meta name="robots" content="noindex, nofollow">
+    <title>Couple's Wedding</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="active">婚禮資訊 (Home)</a></li>
+                <li><a href="about.html">關於我們 (About)</a></li>
+                <li><a href="rsvp.html">報名與電子喜帖 (RSVP)</a></li>
+                <li><a href="gallery.html">精彩搶先看 (Gallery)</a></li>
+                <li><a href="seating.html">當日座位表 (Seating)</a></li>
+            </ul>
+        </nav>
+        <h1 class="couple-names">Couple Name</h1>
+        <p>我們要結婚了！</p>
+    </header>
+
+    <main>
+        <section id="info">
+            <h2>婚禮資訊 (Wedding Information)</h2>
+            <ul>
+                <li><strong>日期 (Date):</strong> <span class="wedding-date">Wedding Date</span></li>
+                <li><strong>時間 (Time):</strong> <span class="wedding-time">Wedding Time</span></li>
+                <li><strong>地點 (Location):</strong> <a href="#" target="_blank" class="wedding-location-link"><span class="wedding-location">Wedding Location</span></a></li>
+                <li><strong>宴會廳 (Hall):</strong> <span class="wedding-hall">Wedding Hall</span></li>
+            </ul>
+        </section>
+
+        <section id="countdown">
+            <h2>距離婚禮還有 (Countdown)</h2>
+            <div id="timer">
+                <div class="time-box">
+                    <span id="days">0</span>
+                    <span class="label">Days</span>
+                </div>
+                <div class="time-box">
+                    <span id="hours">0</span>
+                    <span class="label">Hours</span>
+                </div>
+                <div class="time-box">
+                    <span id="minutes">0</span>
+                    <span class="label">Minutes</span>
+                </div>
+                <div class="time-box">
+                    <span id="seconds">0</span>
+                    <span class="label">Seconds</span>
+                </div>
+            </div>
+            <p>期待與您相見！</p>
+        </section>
+
+        <section id="line-official">
+            <h2>加入我們的 Line 官方帳號 (Join our Line Official Account)</h2>
+            <p>關注我們的最新動態，不錯過任何婚禮資訊！</p>
+            <div class="line-container">
+                <img id="line-qr-code" src="" alt="Line QR Code" class="qr-code">
+                <br>
+                <a id="line-link" href="#" target="_blank" class="btn">加入好友 (Add Friend)</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 <span class="couple-names">Couple Name</span></p>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
