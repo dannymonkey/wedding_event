@@ -11,12 +11,17 @@
 <body>
     <header>
         <nav>
-            <ul>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="nav-list">
                 <li><a href="index.html">婚禮資訊 (Home)</a></li>
                 <li><a href="about.html">關於我們 (About)</a></li>
                 <li><a href="rsvp.html" class="active">報名與電子喜帖 (RSVP)</a></li>
                 <li><a href="gallery.html">精彩搶先看 (Gallery)</a></li>
-                <li><a href="seating.html">當日座位表 (Seating)</a></li>
+                <li><a href="seating.html">當日桌位表 (Seating)</a></li>
             </ul>
         </nav>
         <h1 class="couple-names">Couple Name</h1>
@@ -26,7 +31,10 @@
     <main>
         <section>
             <h2>電子喜帖 (E-Invitation)</h2>
-            <p>這裡將會放置電子喜帖的內容。</p>
+            <div id="invitation-container" class="invitation-wrapper">
+                <!-- Images will be loaded here from config.js -->
+                <p style="text-align: center; color: #666;">(請在 config.js 中設定電子喜帖圖片 ID)</p>
+            </div>
         </section>
 
         <section class="rsvp-container">
@@ -38,7 +46,7 @@
                      2. 點選「傳送」>「<>」(嵌入 HTML)
                      3. 複製 iframe 程式碼並貼在下方
                 -->
-                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfDxxxxxxxxxxxxxxxxxxxx/viewform?embedded=true" width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0">載入中…</iframe>
+                <iframe id="rsvp-form-iframe" src="" width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0">載入中…</iframe>
             </div>
         </section>
 
@@ -48,7 +56,7 @@
             
             <div class="search-box">
                 <input type="text" id="rsvp-guest-name" placeholder="請輸入您的姓名或 Email (Name or Email)">
-                <button id="rsvp-search-btn">查詢 (Search)</button>
+                <button id="rsvp-search-btn" class="btn">查詢 (Search)</button>
             </div>
             <div id="rsvp-search-result" class="search-result"></div>
         </section>

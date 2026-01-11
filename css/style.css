@@ -1,10 +1,15 @@
 /* 基本設定 (Basic Settings) */
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     line-height: 1.6;
     color: #333;
     margin: 0;
     padding: 0;
+    padding-top: 60px; /* Add padding for fixed header */
     text-align: center;
     background-color: #f9f9f9;
 }
@@ -19,8 +24,36 @@ header {
 /* 導覽列樣式 (Navigation Styles) */
 nav {
     background-color: #333;
-    padding: 1rem 0;
-    margin-bottom: 2rem;
+    padding: 0; /* Remove padding from container, use height/flex */
+    margin-bottom: 0; /* Remove margin */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    min-height: 50px; /* Fixed height for the bar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    position: absolute;
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%);
+    right: 1.5rem;
+    z-index: 100;
+}
+
+.bar {
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    margin: 3px 0;
+    transition: 0.4s;
 }
 
 nav ul {
@@ -30,6 +63,7 @@ nav ul {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+    transition: max-height 0.3s ease-out; /* Smooth transition */
 }
 
 nav li {
@@ -147,6 +181,8 @@ footer {
     text-decoration: none;
     font-weight: bold;
     transition: background-color 0.3s;
+    border: none; /* Remove default border */
+    cursor: pointer; /* Add pointer cursor */
 }
 
 .btn:hover {
@@ -165,20 +201,59 @@ footer {
 
 /* 響應式設計 (Responsive Design) */
 @media (max-width: 768px) {
-    /* 導覽列：手機版改為垂直排列 */
+    nav {
+        display: block; /* Switch back to block for easier absolute positioning of toggle */
+        padding: 0; /* Remove padding, use min-height */
+        min-height: 50px;
+    }
+
+    .menu-toggle {
+        display: flex;
+        top: 50%; /* Center vertically */
+        transform: translateY(-50%);
+        right: 1.5rem;
+    }
+
+    /* 導覽列：手機版改為垂直排列且預設隱藏 */
     nav ul {
+        display: none;
         flex-direction: column;
-        gap: 0.5rem;
+        width: 100%;
+        text-align: center;
+        padding-top: 0;
+        background-color: #333; /* Ensure background */
+        position: absolute;
+        top: 50px; /* Position below the nav bar */
+        left: 0;
+    }
+
+    nav ul.active {
+        display: flex;
     }
 
     nav li {
         margin: 0;
+        width: 100%;
     }
 
     nav a {
         display: block;
-        padding: 0.8rem;
-        border-bottom: 1px solid #444;
+        padding: 1rem;
+        border-top: 1px solid #444;
+        border-bottom: none; /* Remove bottom border if using top */
+    }
+
+    /* Hamburger Animation */
+    .menu-toggle.active .bar:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+    }
+
+    .menu-toggle.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle.active .bar:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
     }
 
     /* 倒數計時：縮小字體與間距 */
@@ -203,12 +278,14 @@ footer {
     /* 搜尋框：手機版寬度 100% */
     .search-box {
         flex-direction: column;
-        align-items: stretch;
+        align-items: center; /* Center items horizontally */
+        width: 100%;
     }
 
     .search-box input, 
     .search-box button {
         width: 100%;
+        max-width: 100%; /* Allow full width on mobile */
         box-sizing: border-box; /* 確保 padding 不會撐破寬度 */
     }
     
@@ -236,13 +313,16 @@ footer {
     transform: scale(1.02); /* 滑鼠移過去稍微放大 */
 }
 
-/* 座位查詢樣式 (Seating Search Styles) */
+/* 桌位查詢樣式 (Seating Search Styles) */
 .search-box {
     margin: 2rem 0;
     display: flex;
     justify-content: center;
     gap: 1rem;
     flex-wrap: wrap;
+    max-width: 600px; /* Limit max width for better look on desktop */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .search-box input {
@@ -250,8 +330,10 @@ footer {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 1rem;
-    width: 200px;
+    width: 100%; /* Change to 100% to fill flex item or container */
+    max-width: 300px; /* Default max width */
     outline: none;
+    flex: 1; /* Allow it to grow */
 }
 
 .search-box input:focus {
