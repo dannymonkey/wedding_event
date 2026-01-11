@@ -5,28 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- 防止搜尋引擎索引 -->
     <meta name="robots" content="noindex, nofollow">
-    <title>當日座位表 - Couple's Wedding</title>
+    <title>當日桌位表 - Couple's Wedding</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
         <nav>
-            <ul>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="nav-list">
                 <li><a href="index.html">婚禮資訊 (Home)</a></li>
                 <li><a href="about.html">關於我們 (About)</a></li>
                 <li><a href="rsvp.html">報名與電子喜帖 (RSVP)</a></li>
                 <li><a href="gallery.html">精彩搶先看 (Gallery)</a></li>
-                <li><a href="seating.html" class="active">當日座位表 (Seating)</a></li>
+                <li><a href="seating.html" class="active">當日桌位表 (Seating)</a></li>
             </ul>
         </nav>
         <h1 class="couple-names">Couple Name</h1>
-        <p>當日座位表</p>
+        <p>當日桌位表</p>
     </header>
 
     <main>
         <section>
-            <h2>座位查詢 (Seating Chart)</h2>
-            <p>請輸入您的姓名或 Email 查詢座位 (Enter your Name or Email to find your seat)</p>
+            <h2>桌位查詢 (Seating Chart)</h2>
+            
+            <!-- 桌位表圖片容器 -->
+            <div id="seating-chart-container" class="invitation-wrapper">
+                <!-- Images will be loaded here from config.js -->
+            </div>
+
+            <p>請輸入您的姓名或 Email 查詢桌位 (Enter your Name or Email to find your seat)</p>
             
             <div class="search-box">
                 <input type="text" id="guest-name" placeholder="請輸入姓名或 Email (Name or Email)">
