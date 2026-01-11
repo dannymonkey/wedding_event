@@ -12,6 +12,51 @@ function sanitizeHTML(str) {
         .replace(/'/g, '&#039;');
 }
 
+/**
+ * 通用函數：從 Google Drive 載入圖片到指定容器
+ * @param {string} containerId - 容器元素的 ID
+ * @param {Array<string>} imageIds - Google Drive 檔案 ID 陣列
+ */
+function loadGoogleDriveImages(containerId, imageIds) {
+    const container = document.getElementById(containerId);
+    if (!container || !imageIds || imageIds.length === 0) return;
+
+    container.innerHTML = ''; // Clear placeholder
+
+    imageIds.forEach(id => {
+        const img = document.createElement('img');
+        // 改用 thumbnail endpoint，通常比較穩定且不會遇到跨域問題
+        // sz=w2000 設定寬度為 2000px (高畫質)
+        img.src = `https://drive.google.com/thumbnail?id=${id}&sz=w2000`;
+        img.alt = "Wedding Image";
+        img.style.maxWidth = "100%";
+        img.style.height = "auto";
+        img.style.marginBottom = "1rem";
+        img.style.display = "block";
+        img.style.marginLeft = "auto";
+        img.style.marginRight = "auto";
+        img.loading = "lazy";
+        img.referrerPolicy = "no-referrer"; // 增加這行以減少參照檢查問題
+        
+        img.onerror = function() {
+            console.warn(`Image ${id} failed to load, trying fallback...`);
+            // Fallback: 嘗試直接連結
+            if (this.src.includes('thumbnail')) {
+                    this.src = `https://drive.google.com/uc?export=view&id=${id}`;
+            } else {
+                this.style.display = 'none';
+                const errorMsg = document.createElement('p');
+                errorMsg.style.color = 'red';
+                errorMsg.style.textAlign = 'center';
+                errorMsg.innerHTML = `圖片載入失敗。<br><a href="https://drive.google.com/file/d/${id}/view" target="_blank">點此直接開啟圖片</a>`;
+                container.appendChild(errorMsg);
+            }
+        };
+
+        container.appendChild(img);
+    });
+}
+
 // 這裡可以添加倒數計時或其他互動功能 (Add countdown or other interactive features here)
 document.addEventListener('DOMContentLoaded', () => {
     // 動態更新新人姓名 (Update Couple Names)
@@ -33,64 +78,64 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // 更新新郎資訊
-        if (config.groomName) {
-            document.querySelectorAll('.groom-name').forEach(el => el.textContent = config.groomName);
+        if (config.groom && config.groom.name) {
+            document.querySelectorAll('.groom-name').forEach(el => el.textContent = config.groom.name);
         }
-        if (config.groomBio) {
-            document.querySelectorAll('.groom-bio').forEach(el => el.textContent = config.groomBio);
+        if (config.groom && config.groom.bio) {
+            document.querySelectorAll('.groom-bio').forEach(el => el.textContent = config.groom.bio);
         }
 
         // 更新新娘資訊
-        if (config.brideName) {
-            document.querySelectorAll('.bride-name').forEach(el => el.textContent = config.brideName);
+        if (config.bride && config.bride.name) {
+            document.querySelectorAll('.bride-name').forEach(el => el.textContent = config.bride.name);
         }
-        if (config.brideBio) {
-            document.querySelectorAll('.bride-bio').forEach(el => el.textContent = config.brideBio);
+        if (config.bride && config.bride.bio) {
+            document.querySelectorAll('.bride-bio').forEach(el => el.textContent = config.bride.bio);
         }
 
         // 更新 About Us 背景圖片
-        if (config.groomImage) {
+        if (config.groom && config.groom.image) {
             document.querySelectorAll('.groom-bg').forEach(el => {
-                el.style.backgroundImage = `url('${config.groomImage}')`;
+                el.style.backgroundImage = `url('${config.groom.image}')`;
             });
         }
-        if (config.brideImage) {
+        if (config.bride && config.bride.image) {
             document.querySelectorAll('.bride-bg').forEach(el => {
-                el.style.backgroundImage = `url('${config.brideImage}')`;
+                el.style.backgroundImage = `url('${config.bride.image}')`;
             });
         }
 
         // 更新 Line 官方帳號資訊
-        if (config.lineUrl) {
+        if (config.line && config.line.url) {
             const lineLink = document.getElementById('line-link');
-            if (lineLink) lineLink.href = config.lineUrl;
+            if (lineLink) lineLink.href = config.line.url;
         }
-        if (config.lineQRCode) {
+        if (config.line && config.line.qrCode) {
             const lineQR = document.getElementById('line-qr-code');
-            if (lineQR) lineQR.src = config.lineQRCode;
+            if (lineQR) lineQR.src = config.line.qrCode;
         }
 
         // 更新婚禮資訊 (Location & Time)
-        if (config.weddingDate) {
-            document.querySelectorAll('.wedding-date').forEach(el => el.textContent = config.weddingDate);
+        if (config.wedding && config.wedding.date) {
+            document.querySelectorAll('.wedding-date').forEach(el => el.textContent = config.wedding.date);
         }
-        if (config.weddingTimeDisplay) {
-            document.querySelectorAll('.wedding-time').forEach(el => el.textContent = config.weddingTimeDisplay);
+        if (config.wedding && config.wedding.timeDisplay) {
+            document.querySelectorAll('.wedding-time').forEach(el => el.textContent = config.wedding.timeDisplay);
         }
-        if (config.weddingLocation) {
-            document.querySelectorAll('.wedding-location').forEach(el => el.textContent = config.weddingLocation);
+        if (config.wedding && config.wedding.location) {
+            document.querySelectorAll('.wedding-location').forEach(el => el.textContent = config.wedding.location);
         }
-        if (config.weddingLocationUrl) {
-            document.querySelectorAll('.wedding-location-link').forEach(el => el.href = config.weddingLocationUrl);
+        if (config.wedding && config.wedding.locationUrl) {
+            document.querySelectorAll('.wedding-location-link').forEach(el => el.href = config.wedding.locationUrl);
         }
-        if (config.weddingHall) {
-            document.querySelectorAll('.wedding-hall').forEach(el => el.textContent = config.weddingHall);
+        if (config.wedding && config.wedding.hall) {
+            document.querySelectorAll('.wedding-hall').forEach(el => el.textContent = config.wedding.hall);
         }
     }
 
     // 使用 config 中的日期，若無則使用預設值
-    const targetDateStr = (typeof config !== 'undefined' && config.fullWeddingDate) 
-        ? config.fullWeddingDate 
+    const targetDateStr = (typeof config !== 'undefined' && config.wedding && config.wedding.fullDate) 
+        ? config.wedding.fullDate 
         : '2026-09-27T12:00:00';
         
     const weddingDate = new Date(targetDateStr).getTime();
@@ -122,4 +167,23 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCountdown();
     // 每秒更新一次
     setInterval(updateCountdown, 1000);
+
+    // Mobile Menu Toggle
+    const mobileMenu = document.getElementById('mobile-menu');
+    const navList = document.querySelector('nav ul');
+
+    if (mobileMenu && navList) {
+        mobileMenu.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            navList.classList.toggle('active');
+        });
+
+        // Close menu when a link is clicked
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                navList.classList.remove('active');
+            });
+        });
+    }
 });
