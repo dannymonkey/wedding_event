@@ -1,8 +1,16 @@
 /* 基本設定 (Basic Settings) */
 :root {
-    --font-main: 'Montserrat', sans-serif;       /* 英文內文 / 功能性文字 */
-    --font-serif: 'Cormorant Garamond', 'Noto Serif TC', serif; /* 標題 / 優雅文字 (中英混搭) */
-    --font-script: 'Pinyon Script', cursive;     /* 手寫體 (名字) */
+    --font-main: 'Montserrat', 'Noto Sans TC', sans-serif;       /* 機場指示牌 / 機票內文 */
+    --font-serif: 'Cormorant Garamond', 'Noto Serif TC', serif; /* 優雅標題 */
+    --font-script: 'Pinyon Script', cursive;     /* 手寫簽名 */
+    
+    /* 旅行主題色系 (Travel Theme Colors) */
+    --color-navy: #1B365D;       /* 護照深藍 */
+    --color-gold: #C5A059;       /* 燙金質感 */
+    --color-gold-light: #E6D2A0; /* 淺金 */
+    --color-bg: #F4F7F6;         /* 雲朵/紙張灰白 */
+    --color-text: #2C3E50;       /* 深灰藍文字 */
+    --color-white: #FFFFFF;
 }
 
 * {
@@ -11,37 +19,78 @@
 
 body {
     font-family: var(--font-main);
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1.6;
-    color: #333;
+    color: var(--color-text);
     margin: 0;
     padding: 0;
-    padding-top: 60px; /* Add padding for fixed header */
+    padding-top: 0; /* Remove padding to fix gap issue, Header now handles top spacing */
     text-align: center;
-    background-color: #f9f9f9;
+    background-color: var(--color-bg);
+    background-image: linear-gradient(0deg, #F4F7F6 0%, #E3E9ED 100%); /* 淡淡的漸層，像天空 */
 }
 
-/* 標頭樣式 (Header Styles) */
+/* 標頭樣式 (Header Styles) - 模擬機場航班顯示 */
 header {
-    background-color: #fff;
-    padding: 0 0 2rem 0; /* Adjusted padding */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: var(--color-white);
+    /* 加入淡淡的雲紋理背景 (Cloud Texture) */
+    background-image: 
+        radial-gradient(circle at 20% 20%, rgba(27, 54, 93, 0.03) 0%, transparent 20%),
+        radial-gradient(circle at 80% 50%, rgba(197, 160, 89, 0.05) 0%, transparent 25%),
+        linear-gradient(to bottom, #ffffff 0%, #f4f8fb 100%);
+    padding: 80px 0 3rem 0; /* 增加頂部 padding 以避開 fixed navbar */
+    box-shadow: 0 4px 6px -1px rgba(27, 54, 93, 0.1);
+    border-bottom: 3px solid var(--color-gold); /* 金色邊條 */
+    position: relative;
+    overflow: hidden; /* 防止裝飾溢出 */
 }
 
-/* 導覽列樣式 (Navigation Styles) */
+/* 護照戳章樣式 (Passport Stamp Style) */
+.passport-stamp {
+    position: absolute;
+    /* Move down to clear the fixed nav bar */
+    top: 60%; 
+    right: 15%; /* 放在右側空白處 */
+    transform: translateY(-50%) rotate(-15deg);
+    opacity: 0.85; /* 印章半透明質感 */
+    z-index: 10;
+    pointer-events: none;
+    display: none; /* Mobile 預設隱藏，桌機版顯示 */
+    
+    /* 模擬印章斑駁感 (Moved from .stamp-circle) */
+    mask-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" /></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.3"/><rect width="100%" height="100%" fill="black" /></svg>');
+    -webkit-mask-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" /></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.3"/><rect width="100%" height="100%" fill="black" /></svg>');
+}
+
+.stamp-svg {
+    width: 140px; /* 稍微加大 SVG 容器 */
+    height: 140px;
+    overflow: visible;
+}
+
+/* Old .stamp-circle styles removed */
+
+@media (min-width: 768px) {
+    .passport-stamp {
+        display: block;
+    }
+}
+
+/* 導覽列樣式 (Navigation Styles) - 跑道風格 */
 nav {
-    background-color: #333;
-    padding: 0; /* Remove padding from container, use height/flex */
-    margin-bottom: 0; /* Remove margin */
+    background-color: var(--color-navy);
+    padding: 0;
+    margin-bottom: 0;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1000;
-    min-height: 50px; /* Fixed height for the bar */
+    min-height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 .menu-toggle {
@@ -49,7 +98,7 @@ nav {
     flex-direction: column;
     cursor: pointer;
     position: absolute;
-    top: 50%; /* Center vertically */
+    top: 50%;
     transform: translateY(-50%);
     right: 1.5rem;
     z-index: 100;
@@ -58,7 +107,7 @@ nav {
 .bar {
     width: 25px;
     height: 3px;
-    background-color: #fff;
+    background-color: var(--color-gold); /* 改為金色 */
     margin: 3px 0;
     transition: 0.4s;
 }
@@ -70,90 +119,284 @@ nav ul {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    transition: max-height 0.3s ease-out; /* Smooth transition */
+    transition: max-height 0.3s ease-out;
 }
 
 nav li {
     margin: 0 1rem;
+    position: relative;
 }
 
+/* 導覽連結模擬跑道指示燈或標線 */
 nav a {
-    color: #fff;
+    color: var(--color-white);
     text-decoration: none;
-    font-weight: bold;
-    padding: 0.5rem 1rem;
-    transition: color 0.3s;
-    font-family: var(--font-serif);
-    font-size: 1.1rem;
-    letter-spacing: 1px;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    transition: all 0.3s;
+    font-family: var(--font-main); /* 導覽列維持無襯線體，像機場標示，較好閱讀 */
+    font-size: 0.9rem;
+    letter-spacing: 2px;
     text-transform: uppercase;
+    position: relative;
+    opacity: 0.8;
 }
 
 nav a:hover, nav a.active {
-    color: #d4af37;
+    color: var(--color-gold);
     text-decoration: none;
+    opacity: 1;
+}
+
+/* 飛機跑道效果：Hover 時底部出現線條 */
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--color-gold);
+    transition: width 0.3s ease;
+}
+
+nav a:hover::after, nav a.active::after {
+    width: 100%;
 }
 
 header h1 {
-    margin: 0;
-    color: #d4af37; /* 金色 (Gold) */
+    margin: 1.5rem 0 0.5rem 0;
+    color: var(--color-navy);
     font-family: var(--font-script);
     font-weight: 400;
-    font-size: 3.5rem;
+    font-size: 4rem; /* 稍微加大名字 */
     letter-spacing: 0;
     text-transform: none;
     line-height: 1.2;
-    margin-top: 0.5rem;
 }
 
 header p {
-    font-family: var(--font-serif);
-    font-size: 1.3rem;      /* 稍微放大，提升可讀性 */
-    font-style: italic;     /* 加入斜體 */
-    letter-spacing: 0.05em; /* 大幅縮小間距 */
-    color: #666;
-    margin-top: 1rem;       /* 增加一點上方距離 */
+    font-family: var(--font-serif); /* 改回襯線體，符合使用者喜好的優雅風格 */
+    font-size: 1.2rem;
+    font-weight: 400; /* 不需要太粗 */
+    font-style: italic; /* 恢復斜體 */
+    letter-spacing: 0.1em; 
+    color: var(--color-gold); /* 維持金色 */
+    margin-top: 0.5rem;
     line-height: 1.6;
-    /* text-transform: uppercase; 不要強制大寫，讓斜體曲線自然呈現 */
+    text-transform: none; /* 移除強制大寫 */
+}
+
+/* 裝飾用小飛機圖示 (Pseudo-element) */
+header p::before, header p::after {
+    content: '✈';
+    display: inline-block;
+    margin: 0 15px; /* 加大間距 */
+    color: var(--color-navy);
+    font-size: 0.8em;
+    transform: rotate(-45deg);
+    font-style: normal;
+    opacity: 0.6; /* 讓飛機不要太搶眼 */
+}
+
+/* 增加世界地圖背景微紋理 (World Map Background Texture) */
+/* 使用 SVG 繪製簡單的經緯線 */
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: repeating-linear-gradient(45deg, rgba(27, 54, 93, 0.03) 0, rgba(27, 54, 93, 0.03) 1px, transparent 0, transparent 50%);
+    background-size: 20px 20px; /* 格狀紋理 */
+    pointer-events: none;
+    z-index: 0;
+}
+
+header * {
+    position: relative;
+    z-index: 1; /* 確保內容在背景之上 */
 }
 
 /* 主要內容區塊 (Main Content Sections) */
 main {
-    padding: 2rem;
-    max-width: 800px;
+    padding: 3rem 1rem;
+    max-width: 900px;
     margin: 0 auto;
 }
 
 section {
-    margin-bottom: 2rem;
-    background: #fff;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 3rem;
+    background: var(--color-white);
+    padding: 2rem;
+    border-radius: 16px; /* 較大的圓角 */
+    box-shadow: 0 10px 30px rgba(27, 54, 93, 0.08); /* 深藍色陰影，營造浮空感 */
+    position: relative;
+    overflow: hidden; /* 確保裝飾線條不超出 */
 }
 
+/* 章節標題 - 模擬登機門標示 */
 h2 {
-    color: #555;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 0.5rem;
-    font-family: var(--font-serif);
-    font-style: italic;
+    color: var(--color-navy);
+    border-bottom: none;
+    padding-bottom: 0;
+    font-family: var(--font-serif); /* 恢復優雅襯線體 */
+    font-style: italic; /* 恢復斜體 */
+    font-weight: 600;
+    font-size: 2rem; /* 加大尺寸 */
+    text-transform: none; /* 移除強制全大寫 */
     letter-spacing: 0.05em;
-    font-size: 2rem;
+    margin-bottom: 2rem;
+    display: inline-block;
+    position: relative;
+}
+
+h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background-color: var(--color-gold);
+    margin: 0.5rem auto 0;
+    border-radius: 2px;
+}
+
+.en-subtitle {
+    display: block; /* 換行 / Change to new line */
+    font-size: 0.5em; /* 字體縮小 / Smaller font size */
+    font-family: var(--font-main); /* 英文用無襯線體 / Sans-serif for English */
+    color: var(--color-gold); /* 金色字體 / Gold text */
     font-weight: 400;
+    font-style: normal; /* 不斜體 / Non-italic */
+    margin-top: 5px;
+    letter-spacing: 2px;
+    text-transform: uppercase; /*  全大寫 / Uppercase */
+    opacity: 0.8;
 }
 
 h3 {
     font-family: var(--font-serif);
+    color: var(--color-navy);
 }
 
 section p {
     font-family: var(--font-serif);
     font-size: 1.1rem;
     color: #555;
-    font-weight: 300;
-    letter-spacing: 0.05em;
+    font-weight: 400;
     line-height: 1.8;
+}
+
+/* --- 登機證風格 (Boarding Pass Style for Info Section) --- */
+/* 我們會在 HTML 將 id="info" 的 section 內部結構調整，這裡是其樣式 */
+
+section#info {
+    background-color: var(--color-white);
+    border: 1px solid #e0e0e0;
+    position: relative;
+    padding: 0; /* 清空內距，由內部容器控制 */
+}
+
+/* 登機證頭部色帶 */
+.pass-header {
+    background-color: var(--color-navy);
+    color: var(--color-white);
+    padding: 1.5rem;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pass-header h2 {
+    color: var(--color-white);
+    margin: 0;
+    font-size: 1.5rem;
+    border: none;
+    padding: 0;
+    font-family: var(--font-serif); /* 保持優雅 */
+}
+
+.pass-header h2::after {
+    display: none; /* 移除原本的底線 */
+}
+
+.airline-name {
+    font-family: var(--font-main);
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    font-size: 0.9rem;
+    color: var(--color-gold);
+}
+
+/* 登機證內容區 */
+.pass-body {
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 兩欄排版 */
+    gap: 1.5rem;
+    text-align: left;
+    position: relative;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 19px, #f0f0f0 20px); /* 淡淡的格線紙效果 */
+    background-size: 100% 20px;
+}
+
+/* 登機證上的每一個資訊欄位 */
+.pass-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.pass-item label {
+    font-size: 0.8rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+    margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-main); /* 標籤可以用 Sans-serif 增加對比 */
+}
+
+.pass-item span, .pass-item a {
+    font-family: var(--font-serif); /* 內容改回襯線體，這是使用者喜歡的部分 */
+    font-size: 1.6rem; /* 加大 */
+    color: var(--color-navy);
+    font-weight: 500;
+    text-transform: none; /* 不強制大寫 */
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+}
+
+/* 虛線分隔線 - 模擬撕票處 (Tear-off line) */
+.tear-off-line {
+    border-top: 2px dashed #ccc;
+    margin: 2rem 0;
+    position: relative;
+    grid-column: 1 / -1; /* 跨越兩欄 */
+}
+
+/* 虛線兩端的半圓切口 */
+.tear-off-line::before, .tear-off-line::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    width: 20px;
+    height: 20px;
+    background-color: var(--color-bg); /* 與背景色相同，製造"切口"錯覺 */
+    border-radius: 50%;
+}
+.tear-off-line::before { left: -30px; } /* 超出 padding 範圍 */
+.tear-off-line::after { right: -30px; }
+
+/* 地點連結特效 */
+section#info a.wedding-location-link span {
+    color: var(--color-navy);
+    border-bottom: 2px solid var(--color-gold);
+    display: inline-block;
 }
 
 ul {
@@ -165,302 +408,225 @@ li {
     margin-bottom: 0.5rem;
 }
 
-/* 針對內容區塊列表的字體優化 (Wedding Info List) */
-section ul {
-    max-width: 600px; /* 限制內容寬度，讓卡片感更集中 */
-    margin: 0 auto;
-}
-
-section ul li {
-    display: flex;
-    flex-direction: column; /* 改為垂直排列 (Label 上, Value 下) */
-    align-items: center;    /* 置中對齊 */
-    justify-content: center;
-    padding: 1.5rem 0;      /* 增加上下呼吸空間 */
-    border-bottom: 1px solid rgba(212, 175, 55, 0.2); /* 改為更優雅的金色細線 */
-    margin-bottom: 0;
-}
-
-section ul li:last-child {
-    border-bottom: none;
-}
-
-section ul li strong {
-    display: block;         /* 強制換行 */
-    font-size: 0.9rem;      /* 標籤縮小 */
-    color: #999;            /* 顏色變淡，作為襯托 */
-    text-transform: uppercase;
-    letter-spacing: 0.2em;  /* 拉大間距，極簡風格 */
-    font-family: var(--font-main); /* 使用無襯線體，與內文區隔 */
-    margin-bottom: 0.5rem;  /* 與下方內容保持距離 */
-    margin-right: 0;        /* 移除原本的右邊距 */
-}
-
-section ul li span, section ul li a {
-    display: block;
-    font-family: var(--font-serif);
-    font-size: 1.8rem;      /* 內容大幅放大 */
-    color: #333;
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    line-height: 1.2;
-}
-
-/* 特別針對地點連結優化 */
-section ul li a.wedding-location-link span {
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.3s;
-}
-
-section ul li a.wedding-location-link:hover span {
-    border-color: #d4af37;
-    color: #d4af37;
-}
-
 a {
-    color: #d4af37;
+    color: var(--color-navy);
     text-decoration: none;
 }
 
 a:hover {
-    text-decoration: underline;
+    color: var(--color-gold);
 }
 
 /* 頁尾 (Footer) */
 footer {
-    background-color: #333;
-    color: #fff;
-    padding: 1rem 0;
-    margin-top: 2rem;
+    background-color: var(--color-navy);
+    color: var(--color-white);
+    padding: 2rem 0;
+    margin-top: 3rem;
+    font-family: monospace; /* 模擬護照底部 MRZ 碼 */
+    letter-spacing: 2px;
+    border-top: 5px solid var(--color-gold);
 }
 
-/* 倒數計時樣式 (Countdown Styles) */
+/* 航班動態看板樣式 (Flight Status Board) */
+.status-board {
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 2rem 1rem;
+    position: relative;
+    /* 上方增加一行裝飾線 */
+    border-top: 4px solid var(--color-navy);
+}
+
+.status-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.status-label {
+    display: inline-block;
+    font-family: var(--font-main);
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    color: var(--color-gold);
+    font-weight: 700;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+/* 倒數計時樣式 - 調整為整合型 (Integrated Timer) */
 #timer {
     display: flex;
     justify-content: center;
-    gap: 1.5rem;
-    margin: 2rem 0;
+    gap: 1.5rem; /* 加大間距 */
+    margin: 0 auto 1rem; /* 減少下方間距 */
     flex-wrap: wrap;
 }
 
 .time-box {
-    background-color: #f4f4f4;
-    padding: 1rem;
-    border-radius: 8px;
-    min-width: 80px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    border: 1px solid #e0e0e0;
+    background-color: transparent; /* 移除深色背景 */
+    padding: 0; 
+    border-radius: 0;
+    min-width: 60px;
+    box-shadow: none; /* 移除陰影 */
+    border: none;
+    position: relative;
+    text-align: center;
 }
 
-.time-box span {
-    display: block;
+/* 移除原本翻牌效果線條 */
+.time-box::after {
+    display: none;
 }
 
 .time-box span:first-child {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #d4af37;
-    line-height: 1.2;
+    font-size: 3.5rem; /* 字體加大 */
+    font-weight: 300; /* 變細 */
+    color: var(--color-navy); /* 改用深藍色 */
+    line-height: 1;
+    font-family: var(--font-main); /* 改用無襯線體，像電子鐘 */
+    font-variant-numeric: tabular-nums; /* 等寬數字 */
 }
 
 .time-box .label {
-    font-size: 0.9rem;
-    color: #666;
+    font-size: 0.7rem;
+    color: #999;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    margin-top: 0.5rem;
+    font-weight: 500;
 }
 
-/* 按鈕樣式 (Button Styles) */
+/* 按鈕樣式 (Button Styles) - 像是"Check In"按鈕 */
 .btn {
     display: inline-block;
-    background-color: #d4af37;
+    background-color: var(--color-navy);
     color: #fff;
-    padding: 0.8rem 1.5rem;
-    border-radius: 4px;
+    padding: 1rem 2rem;
+    border-radius: 50px; /* 膠囊狀 */
     text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.3s;
-    border: none; /* Remove default border */
-    cursor: pointer; /* Add pointer cursor */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s;
+    border: 2px solid var(--color-navy);
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(27, 54, 93, 0.2);
 }
 
 .btn:hover {
-    background-color: #b5952f;
-    text-decoration: none;
-    color: #fff;
+    background-color: var(--color-white);
+    color: var(--color-navy);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(27, 54, 93, 0.3);
 }
 
-/* 圖片網格 (Gallery Grid) */
+/* 圖片網格 (Gallery Grid) - 模擬護照簽證頁的格子 */
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 強制 3 欄 (Force 3 columns) */
-    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
     margin-top: 2rem;
 }
 
-/* 響應式設計 (Responsive Design) */
-@media (max-width: 768px) {
+.gallery-grid img {
+    border-radius: 8px;
+    border: 4px solid var(--color-white); /* 像拍立得或照片 */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* 桌位查詢 (Seating Search) - 模擬行李查詢 Tag */
+.search-box input {
+    border: 2px solid #ddd;
+    background-color: #f9f9f9;
+    padding: 1rem;
+    font-family: var(--font-main);
+    letter-spacing: 1px;
+}
+
+.search-box input:focus {
+    border-color: var(--color-navy);
+    background-color: #fff;
+}
+
+.result-card {
+    border-top: 5px solid var(--color-navy); /* 像行李吊牌的頭 */
+}
+
+.table-number {
+    color: var(--color-navy);
+    font-family: var(--font-main);
+    border: 2px dashed var(--color-navy); /* 虛線框 */
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    border-radius: 8px;
+}
+
+/* 響應式設計 */
+@media (max-width: 1024px) {
     nav {
-        display: block; /* Switch back to block for easier absolute positioning of toggle */
-        padding: 0; /* Remove padding, use min-height */
+        display: block;
         min-height: 50px;
     }
-
+    
     .menu-toggle {
         display: flex;
-        top: 50%; /* Center vertically */
-        transform: translateY(-50%);
-        right: 1.5rem;
     }
 
-    /* 導覽列：手機版改為垂直排列且預設隱藏 */
     nav ul {
         display: none;
         flex-direction: column;
         width: 100%;
-        text-align: center;
-        padding-top: 0;
-        background-color: #333; /* Ensure background */
+        background-color: var(--color-navy);
         position: absolute;
-        top: 50px; /* Position below the nav bar */
+        top: 50px;
         left: 0;
+        padding-bottom: 1rem;
     }
 
     nav ul.active {
         display: flex;
     }
-
-    nav li {
-        margin: 0;
-        width: 100%;
+    
+    /* 手機版登機證轉為單欄 */
+    .pass-body {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
-
-    nav a {
-        display: block;
-        padding: 1rem;
-        border-top: 1px solid #444;
-        border-bottom: none; /* Remove bottom border if using top */
+    
+    header h1 {
+        font-size: 2.5rem;
     }
-
-    /* Hamburger Animation */
-    .menu-toggle.active .bar:nth-child(1) {
-        transform: rotate(-45deg) translate(-5px, 6px);
+    
+    .tear-off-line {
+        margin: 1.5rem 0;
     }
-
-    .menu-toggle.active .bar:nth-child(2) {
-        opacity: 0;
-    }
-
-    .menu-toggle.active .bar:nth-child(3) {
-        transform: rotate(45deg) translate(-5px, -6px);
-    }
-
-    /* 倒數計時：縮小字體與間距 */
-    #timer {
-        gap: 0.5rem;
-    }
-
-    .time-box {
-        min-width: 60px;
-        padding: 0.5rem;
-    }
-
-    .time-box span:first-child {
-        font-size: 1.8rem;
-    }
-
-    /* 相簿：手機版改為 1 欄 */
+    
     .gallery-grid {
         grid-template-columns: 1fr;
     }
 
-    /* 搜尋框：手機版寬度 100% */
-    .search-box {
-        flex-direction: column;
-        align-items: center; /* Center items horizontally */
-        width: 100%;
-    }
-
-    .search-box input, 
-    .search-box button {
-        width: 100%;
-        max-width: 100%; /* Allow full width on mobile */
-        box-sizing: border-box; /* 確保 padding 不會撐破寬度 */
-    }
-    
-    /* 內容區塊：減少內距 */
-    main {
+    /* 手機版導覽連結樣式修正 */
+    nav a {
+        display: block;
         padding: 1rem;
+        border-top: 1px solid rgba(255,255,255,0.1); 
+        border-bottom: none; 
     }
-    
-    section {
-        padding: 1rem;
+
+    /* 手機版移除原本的跑道線效果 */
+    nav a::after {
+        display: none;
+    }
+
+    /* 手機版 Active 狀態樣式 */
+    nav a:hover, nav a.active {
+        color: var(--color-gold);
+        background-color: rgba(0,0,0,0.2); 
     }
 }
 
-.gallery-grid img {
-    width: 100%;
-    height: 100%; /* 確保高度填滿 */
-    object-fit: cover; /* 保持比例裁切，讓格子整齊 */
-    aspect-ratio: 1 / 1; /* 設定為正方形，讓排版更整齊 (Optional: make images square) */
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
-}
-
-.gallery-grid img:hover {
-    transform: scale(1.02); /* 滑鼠移過去稍微放大 */
-}
-
-/* 桌位查詢樣式 (Seating Search Styles) */
-.search-box {
-    margin: 2rem 0;
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    max-width: 600px; /* Limit max width for better look on desktop */
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.search-box input {
-    padding: 0.8rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-    width: 100%; /* Change to 100% to fill flex item or container */
-    max-width: 300px; /* Default max width */
-    outline: none;
-    flex: 1; /* Allow it to grow */
-}
-
-.search-box input:focus {
-    border-color: #d4af37;
-}
-
-.result-card {
-    background: #fff;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    margin-top: 2rem;
-    display: inline-block;
-    min-width: 200px;
-    border: 1px solid #eee;
-}
-
-.result-card h3 {
-    margin-top: 0;
-    color: #333;
-}
-
-.table-number {
-    font-size: 3rem;
-    color: #d4af37;
-    font-weight: bold;
-    margin-top: 1rem;
-}
 
 /* 關於我們頁面樣式 (About Page Styles) */
 /* 讓 main 區塊在 about 頁面可以滿版 */
@@ -575,6 +741,66 @@ footer {
     margin-top: 1.5rem;
 }
 
+/* 飛行路徑視覺化 / Flight Route Visualization */
+.flight-route-container {
+    margin: 0 auto; /* 移除上方間距 */
+    width: 100%;
+    max-width: 800px;
+    position: relative;
+    padding: 0; /* 移除內距 */
+}
+
+.route-svg-wrapper {
+    width: 100%;
+    position: relative;
+    margin-bottom: -20px; /* 稍微向上修飾底部留白 */
+}
+
+.route-svg {
+    width: 100%;
+    height: auto;
+    overflow: visible; /* 允許文字或陰影超出原本框框 */
+}
+
+.svg-text {
+    font-family: var(--font-main);
+    fill: var(--color-navy);
+}
+
+.date-label {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.code-label {
+    font-size: 12px;
+    fill: #888;
+    letter-spacing: 1px;
+}
+
+.future-label {
+    font-size: 14px;
+    fill: var(--color-gold);
+    font-weight: 600;
+    font-style: italic;
+    font-family: var(--font-serif);
+}
+
+.route-plane-icon {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    color: var(--color-navy);
+    top: 0;
+    left: 0;
+    transform-origin: center center;
+    filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.2));
+    z-index: 10;
+    /* 初始隱藏，由 JS 計算位置後顯示 */
+    opacity: 0; 
+    transition: opacity 0.5s;
+}
+
 .qr-code {
     max-width: 200px;
     width: 100%;
@@ -587,3 +813,236 @@ footer {
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
+
+/* --- 查詢結果：登機證樣式 (Boarding Pass Result Style) --- */
+.boarding-pass-result {
+    width: 100%;
+    max-width: 650px;
+    margin: 2rem auto;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(27, 54, 93, 0.15);
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    text-align: left;
+    transition: transform 0.3s ease;
+}
+
+.boarding-pass-result:hover {
+    transform: translateY(-5px);
+}
+
+/* 左側主資訊區 */
+.bp-main {
+    flex: 2;
+    padding: 1.5rem;
+    position: relative;
+    border-right: 2px dashed #ccc; /* 撕票處 */
+    background: radial-gradient(circle at right center, transparent 10px, #fff 10px);
+    background-position: top right;
+}
+
+/* 讓撕票處有半圓缺口 */
+.bp-main::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 20px;
+    height: 20px;
+    background-color: var(--color-bg); /* 與背景色相同 */
+    border-radius: 50%;
+}
+
+.bp-main::before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    right: -10px;
+    width: 20px;
+    height: 20px;
+    background-color: var(--color-bg);
+    border-radius: 50%;
+}
+
+/* 右側副券區 (Stub) */
+.bp-stub {
+    flex: 1;
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+    background: radial-gradient(circle at left center, transparent 10px, #f9f9f9 10px);
+    background-position: top left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+
+/* 副券半圓缺口 */
+.bp-stub::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 20px;
+    height: 20px;
+    background-color: var(--color-bg);
+    border-radius: 50%;
+}
+
+.bp-stub::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: -10px;
+    width: 20px;
+    height: 20px;
+    background-color: var(--color-bg);
+    border-radius: 50%;
+}
+
+/* 登機證頭部 (Logo & Title) */
+.bp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--color-navy);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.bp-logo {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--color-navy);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.bp-title {
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    color: var(--color-gold);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.bp-flight-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.bp-group label {
+    display: block;
+    font-size: 0.65rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+}
+
+.bp-group span {
+    display: block;
+    font-size: 1.1rem;
+    color: var(--color-navy);
+    font-weight: 700;
+    font-family: var(--font-main);
+}
+
+.bp-route {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.bp-city {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-navy);
+}
+
+.bp-plane-icon {
+    display: inline-block;
+    color: var(--color-gold);
+    font-size: 1.2rem;
+}
+
+.bp-passenger label {
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+}
+
+.bp-passenger-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-navy);
+    font-family: var(--font-serif);
+}
+
+/* 副券樣式細節 */
+.bp-stub .bp-header {
+    justify-content: center;
+}
+
+.bp-stub .bp-city {
+    font-size: 1.2rem;
+}
+
+.bp-seat-large {
+    text-align: center;
+    margin: 1rem 0;
+    padding: 0.5rem;
+    border: 2px solid var(--color-navy);
+    border-radius: 6px;
+}
+
+.bp-seat-large label {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #888;
+}
+
+.bp-seat-large span {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--color-navy);
+}
+
+.bp-barcode {
+    width: 100%;
+    height: auto;
+    margin-top: auto;
+    opacity: 0.8;
+}
+
+/* 手機版響應式 */
+@media (max-width: 600px) {
+    .boarding-pass-result {
+        flex-direction: column;
+        max-width: 350px;
+    }
+
+    .bp-main {
+        border-right: none;
+        border-bottom: 2px dashed #ccc;
+        background: radial-gradient(circle at bottom center, transparent 10px, #fff 10px);
+        background-position: bottom center;
+    }
+
+    .bp-stub {
+        background: radial-gradient(circle at top center, transparent 10px, #f9f9f9 10px);
+        background-position: top center;
+        border-top: none;
+    }
+    
+    .bp-main::after, .bp-main::before, .bp-stub::after, .bp-stub::before {
+        display: none; /* 簡化手機版切口，或者需要重新定位 */
+    }
+}

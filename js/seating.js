@@ -31,11 +31,46 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // --- Prepare Dynamic Data from config.js ---
+        // Date Formatting: e.g. "2026-09-27" -> "27 SEP"
+        const dateParts = config.wedding.date.split('-'); // [2026, 09, 27]
+        const year = dateParts[0];
+        const monthIndex = parseInt(dateParts[1]) - 1;
+        const day = dateParts[2];
+        const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+        const dateStr = `${day} ${monthNames[monthIndex]}`;
+        
+        // Flight Code Logic: Use centralized logic from config.js
+        const flightCode = config.flightCode;
+        
+        // Time: HH:mm (First 5 chars)
+        const timeStr = config.wedding.time.substring(0, 5);
+        
+        // Gate: Use Hall Name (but keep it concise if possible, here using full hall)
+        // Taking first 10 chars to prevent layout break if too long? No, Hall name is important.
+        const gateStr = config.wedding.hall; 
+        // ------------------------------------------
+
         resultDiv.innerHTML = '<p>查詢中... (Searching...)</p>';
 
+        // --- PREVIEW / DEMO MODE (預覽模式) ---
+        if (query.toLowerCase() === 'demo' || query === '預覽') {
+            setTimeout(() => {
+                const passengerName = "貴賓 (GUEST)";
+                const seatNumber = "VIP";
+                
+                resultDiv.innerHTML = renderBoardingPassHTML(passengerName, seatNumber, flightCode, dateStr, timeStr, gateStr);
+                // Generate Barcode
+                generateBPBarcode(`${flightCode}-${seatNumber}`);
+                // Setup Download Button
+                setupDownloadButton(`BoardingPass_Demo.png`);
+            }, 600);
+            return;
+        }
+        // --------------------------------------
+
         try {
-            // 優先使用 config 中的設定，若無則使用預設值 (這裡假設使用者可能還沒設定 config.seating.apiUrl)
-            // 為了保持一致性，建議也將 seatingApiUrl 移至 config.js
+            // 優先使用 config 中的設定，若無則使用預設值
             const seatingApiUrl = (config.seating && config.seating.apiUrl) ? config.seating.apiUrl : "YOUR_GOOGLE_APPS_SCRIPT_URL";
 
             if (seatingApiUrl === "YOUR_GOOGLE_APPS_SCRIPT_URL" || seatingApiUrl === "") {
@@ -54,13 +89,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             if (data.found) {
-                resultDiv.innerHTML = `
-                    <div class="result-card">
-                        <h3>${sanitizeHTML(query)}</h3>
-                        <p>您的桌位在：</p>
-                        <div class="table-number">${sanitizeHTML(data.table)}</div>
-                    </div>
-                `;
+                // Generate Boarding Pass HTML - Logic Updated to match css/style.css
+                const passengerName = sanitizeHTML(query.toUpperCase());
+                const seatNumber = sanitizeHTML(data.table);
+                
+                resultDiv.innerHTML = renderBoardingPassHTML(passengerName, seatNumber, flightCode, dateStr, timeStr, gateStr);
+                // Generate Barcode
+                generateBPBarcode(`${flightCode}-${seatNumber}`);
+                // Setup Download Button
+                setupDownloadButton(`BoardingPass_${passengerName}.png`);
             } else {
                 resultDiv.innerHTML = `<p>找不到 "<strong>${sanitizeHTML(query)}</strong>" 的桌位資訊。<br>請確認輸入正確，或直接聯繫新人。</p>`;
             }
@@ -68,6 +105,142 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error fetching seating data:', error);
             resultDiv.innerHTML = '<p style="color: red;">查詢失敗，請檢查網路連線或稍後再試。</p>';
+        }
+    }
+
+    function renderBoardingPassHTML(passengerName, seatNumber, flightCode, dateStr, timeStr, gateStr) {
+        return `
+            <div id="bp-container" style="padding: 10px; background-color: transparent;"> <!-- Container for capture -->
+                <div class="boarding-pass-result animate-in">
+                    <!-- Main Ticket -->
+                    <div class="bp-main">
+                        <div class="bp-header">
+                            <div class="bp-logo">
+                                <span>✈</span> LOVE AIRLINES
+                            </div>
+                            <div class="bp-title">BOARDING PASS</div>
+                        </div>
+
+                        <div class="bp-route">
+                            <div class="bp-city">YOU</div>
+                            <div class="bp-plane-icon">✈</div>
+                            <div class="bp-city">US</div>
+                        </div>
+                        
+                        <div class="bp-flight-info">
+                            <div class="bp-group">
+                                <label>FLIGHT</label>
+                                <span>${flightCode}</span>
+                            </div>
+                            <div class="bp-group">
+                                <label>DATE</label>
+                                <span>${dateStr}</span>
+                            </div>
+                            <div class="bp-group">
+                                <label>TIME</label>
+                                <span>${timeStr}</span>
+                            </div>
+                            <div class="bp-group" style="grid-column: span 3;">
+                                <label>GATE</label>
+                                <span>${gateStr}</span>
+                            </div>
+                        </div>
+
+                        <div class="bp-passenger">
+                            <label>PASSENGER NAME</label>
+                            <div class="bp-passenger-name">${passengerName}</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Stub (Right Side) -->
+                    <div class="bp-stub">
+                        <div class="bp-header">
+                            <div class="bp-city">US</div>
+                        </div>
+                        
+                        <div class="bp-passenger">
+                            <label>PASSENGER</label>
+                            <div class="bp-passenger-name" style="font-size: 1rem;">${passengerName}</div>
+                        </div>
+                        
+                        <div class="bp-seat-large">
+                            <label>SEAT NO.</label>
+                            <span>${seatNumber}</span>
+                        </div>
+
+                        <img class="bp-barcode" />
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; text-align: center;">
+                <button id="download-bp-btn" class="btn" style="background-color: var(--color-navy); color: white;">
+                    <span style="font-size: 1.2rem; margin-right: 5px;">📥</span> 下載登機證 (Download)
+                </button>
+            </div>
+        `;
+    }
+
+    function setupDownloadButton(fileName) {
+        const downloadBtn = document.getElementById('download-bp-btn');
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', () => {
+                const element = document.getElementById('bp-container'); // Capture the wrapper
+                if (typeof html2canvas === 'function' && element) {
+                    // Show loading state
+                    const originalText = downloadBtn.innerHTML;
+                    downloadBtn.innerText = "處理中... (Processing...)";
+                    downloadBtn.disabled = true;
+
+                    html2canvas(element, {
+                        backgroundColor: null, // Transparent background if possible, or use computed
+                        scale: 2, // Retain high quality
+                        useCORS: true, // Attempt to load external images if any
+                        logging: false
+                    }).then(canvas => {
+                        // Create download link
+                        const link = document.createElement('a');
+                        link.download = fileName || 'boarding-pass.png';
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+
+                        // Restore button
+                        downloadBtn.innerHTML = originalText;
+                        downloadBtn.disabled = false;
+                    }).catch(err => {
+                        console.error("Screenshot failed:", err);
+                        downloadBtn.innerText = "下載失敗 (Failed)";
+                        setTimeout(() => {
+                            downloadBtn.innerHTML = originalText;
+                            downloadBtn.disabled = false;
+                        }, 3000);
+                    });
+                } else {
+                    console.error("html2canvas library not loaded or element missing");
+                    alert("無法下載，請稍後再試 (Download unavailable)");
+                }
+            });
+        }
+    }
+
+    function generateBPBarcode(text) {
+        if (typeof JsBarcode === 'function') {
+            try {
+                // Ensure the element exists before calling
+                if (document.querySelector(".bp-barcode")) {
+                    JsBarcode(".bp-barcode", text, {
+                        format: "CODE128",
+                        width: 2,
+                        height: 30,
+                        displayValue: false,
+                        margin: 0,
+                        background: "transparent",
+                        lineColor: "#333"
+                    });
+                }
+            } catch (e) {
+                console.warn("Barcode generation failed:", e);
+            }
         }
     }
 });

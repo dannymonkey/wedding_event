@@ -16,11 +16,23 @@ const config = {
         return `${this.groom.name} & ${this.bride.name}`;
     },
 
+    // 自動生成航班編號 (例如: "DV2026")
+    get flightCode() {
+        if (this.groom && this.groom.name && this.bride && this.bride.name && this.wedding && this.wedding.date) {
+            const groomInitial = this.groom.name.charAt(0).toUpperCase();
+            const brideInitial = this.bride.name.charAt(0).toUpperCase();
+            const year = this.wedding.date.split('-')[0];
+            return `${groomInitial}${brideInitial}${year}`;
+        }
+        return "WED2026"; // Fallback
+    },
+
     wedding: {
         date: "2026-09-27",
         time: "12:00:00",
         timeDisplay: "12:00 午宴 (Lunch Banquet)", // 顯示在頁面上的時間文字
         fullDate: "2026-09-27T12:00:00",
+        flightStart: "2025-11-23", // 飛行起飛日期 (作為進度條起點，例如求婚日或一年前) / Flight Departure Date for Progress Bar
         location: "茹曦酒店 (Illume Taipei)",
         locationUrl: "https://maps.app.goo.gl/1r8dfQSAZFKQgdfW7",
         hall: "5F 斯賓諾莎廳"

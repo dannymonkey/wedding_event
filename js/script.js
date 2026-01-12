@@ -131,6 +131,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (config.wedding && config.wedding.hall) {
             document.querySelectorAll('.wedding-hall').forEach(el => el.textContent = config.wedding.hall);
         }
+
+        // 更新航班編號 (Flight No.) - 使用 config.flightCode
+        if (config.flightCode) {
+            document.querySelectorAll('.wedding-flight-no').forEach(el => el.textContent = config.flightCode);
+        }
     }
 
     // 使用 config 中的日期，若無則使用預設值
@@ -139,6 +144,97 @@ document.addEventListener('DOMContentLoaded', () => {
         : '2026-09-27T12:00:00';
         
     const weddingDate = new Date(targetDateStr).getTime();
+
+    // 飛行路徑視覺化邏輯 / Flight Path Visualization Logic (Parabola)
+    function updateFlightProgress() {
+        if (!config.wedding.flightStart) return;
+
+        const plane = document.getElementById('route-plane');
+        const pathSolid = document.getElementById('path-solid'); // Get the solid path element
+        const svgDepDate = document.getElementById('svg-dep-date');
+        const svgWeddingDate = document.getElementById('svg-wedding-date');
+
+        if (!plane || !pathSolid) return;
+
+        const startDate = new Date(config.wedding.flightStart).getTime();
+        const endDate = new Date(config.wedding.fullDate).getTime();
+        const now = new Date().getTime();
+
+        // Update Dates Text in SVG
+        if (config.wedding.flightStart) {
+            const d = new Date(config.wedding.flightStart);
+            if (svgDepDate) svgDepDate.textContent = `${d.getFullYear()} ${d.toLocaleString('en-US', { month: 'short' }).toUpperCase()}`;
+        }
+        if (config.wedding.date) {
+            const d = new Date(config.wedding.date);
+            if (svgWeddingDate) svgWeddingDate.textContent = `${d.getFullYear()} ${d.toLocaleString('en-US', { month: 'short' }).toUpperCase()}`;
+        }
+
+        // Calculate progress percentage (0.0 to 1.0)
+        let t = 0;
+        if (now >= endDate) {
+            t = 1;
+        } else if (now <= startDate) {
+            t = 0;
+        } else {
+            t = (now - startDate) / (endDate - startDate);
+        }
+        
+        // Use SVG Path methods to calculate position and draw the line
+        const pathLen = pathSolid.getTotalLength();
+        
+        // 1. Draw the Solid Line (Progress)
+        // Set stroke-dasharray to total length (so it can be fully solid)
+        pathSolid.style.strokeDasharray = pathLen;
+        // Set stroke-dashoffset to hide the part not yet flown
+        // offset = length * (1 - t). 
+        // If t=0, offset=len (fully hidden). If t=1, offset=0 (fully visible).
+        pathSolid.style.strokeDashoffset = pathLen * (1 - t);
+
+        // 2. Position the Plane
+        // Get point at current length
+        const currentLen = pathLen * t;
+        const point = pathSolid.getPointAtLength(currentLen);
+        
+        const x = point.x;
+        const y = point.y;
+
+        // 3. Calculate Rotation (Tangent)
+        // Get a point slightly before and after to determine the angle
+        const lookAhead = 1.0; // 1px
+        const pBefore = pathSolid.getPointAtLength(Math.max(0, currentLen - lookAhead));
+        const pAfter = pathSolid.getPointAtLength(Math.min(pathLen, currentLen + lookAhead));
+        
+        const dx = pAfter.x - pBefore.x;
+        const dy = pAfter.y - pBefore.y;
+        
+        let rotation = Math.atan2(dy, dx) * (180 / Math.PI);
+        // Correct for SVG icon initial orientation (Upright 0deg) -> Needs to point Right (90deg in CSS terms usually?)
+        // Actually, atan2(0,1) = 0 (Right). atan2(1,0) = 90 (Down).
+        // Our SVG Plane points UP.
+        // If we want it to point RIGHT (0deg), we need +90deg rotation?
+        // Let's verify: 
+        // Plane UP. rotate(90) -> Plane RIGHT.
+        // atan2 results: Right=0, Down=90, Up=-90, Left=180.
+        // So if direction is Right (0), we want Plane RIGHT (which is rotate(90)).
+        rotation += 90;
+
+        // Position the plane using CSS percentage relative to the wrapper
+        // The SVG viewBox is 0 0 1000 250.
+        // x percent = x / 1000 * 100
+        // y percent = y / 250 * 100
+        
+        plane.style.left = `${(x / 1000) * 100}%`;
+        plane.style.top = `${(y / 250) * 100}%`;
+        plane.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+        plane.style.opacity = 1; // Show plane
+    }
+    
+    // 初始化進度條
+    // Wait slightly for SVG to be rendered properly if needed, but usually fine
+    updateFlightProgress();
+    // Update every minute just in case
+    setInterval(updateFlightProgress, 60000);
 
     function updateCountdown() {
         const timerElement = document.getElementById("timer");
