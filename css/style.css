@@ -1061,4 +1061,41 @@ footer {
     .bp-main::after, .bp-main::before, .bp-stub::after, .bp-stub::before {
         display: none; /* 簡化手機版切口，或者需要重新定位 */
     }
+
+    /* --- Mobile Fixes for Flight Status & Timer --- */
+
+    /* Timer: Enforce 2x2 grid on small screens to avoid awkward pyramid wrapping */
+    #timer {
+        gap: 0.5rem;
+    }
+    
+    .time-box {
+        flex: 1 1 40%; /* Force items to take up ~half width, creating 2x2 grid */
+        margin-bottom: 0.5rem;
+    }
+
+    .time-box span:first-child {
+        font-size: 2.5rem; /* Reduce font size from 3.5rem */
+    }
+
+    /* Fixed strange wrapping of "ESTIMATED TIME OF ARRIVAL" */
+    .status-label {
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+    }
+
+    /* Improve Flight Route SVG text legibility on mobile */
+    .svg-text.date-label {
+        font-size: 28px; /* Increase size relative to scaled-down SVG */
+        font-weight: 800;
+    }
+    
+    .svg-text.code-label {
+        font-size: 24px;
+        transform: translateY(20px); /* Push down to prevent overlap with larger date text */
+    }
+    
+    .svg-text.future-label {
+        font-size: 28px;
+    }
 }
