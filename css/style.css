@@ -1,10 +1,17 @@
 /* 基本設定 (Basic Settings) */
+:root {
+    --font-main: 'Montserrat', sans-serif;       /* 英文內文 / 功能性文字 */
+    --font-serif: 'Cormorant Garamond', 'Noto Serif TC', serif; /* 標題 / 優雅文字 (中英混搭) */
+    --font-script: 'Pinyon Script', cursive;     /* 手寫體 (名字) */
+}
+
 * {
     box-sizing: border-box;
 }
 
 body {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: var(--font-main);
+    font-weight: 300;
     line-height: 1.6;
     color: #333;
     margin: 0;
@@ -76,6 +83,10 @@ nav a {
     font-weight: bold;
     padding: 0.5rem 1rem;
     transition: color 0.3s;
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 nav a:hover, nav a.active {
@@ -86,6 +97,24 @@ nav a:hover, nav a.active {
 header h1 {
     margin: 0;
     color: #d4af37; /* 金色 (Gold) */
+    font-family: var(--font-script);
+    font-weight: 400;
+    font-size: 3.5rem;
+    letter-spacing: 0;
+    text-transform: none;
+    line-height: 1.2;
+    margin-top: 0.5rem;
+}
+
+header p {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;      /* 稍微放大，提升可讀性 */
+    font-style: italic;     /* 加入斜體 */
+    letter-spacing: 0.05em; /* 大幅縮小間距 */
+    color: #666;
+    margin-top: 1rem;       /* 增加一點上方距離 */
+    line-height: 1.6;
+    /* text-transform: uppercase; 不要強制大寫，讓斜體曲線自然呈現 */
 }
 
 /* 主要內容區塊 (Main Content Sections) */
@@ -107,6 +136,24 @@ h2 {
     color: #555;
     border-bottom: 2px solid #eee;
     padding-bottom: 0.5rem;
+    font-family: var(--font-serif);
+    font-style: italic;
+    letter-spacing: 0.05em;
+    font-size: 2rem;
+    font-weight: 400;
+}
+
+h3 {
+    font-family: var(--font-serif);
+}
+
+section p {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    color: #555;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    line-height: 1.8;
 }
 
 ul {
@@ -116,6 +163,58 @@ ul {
 
 li {
     margin-bottom: 0.5rem;
+}
+
+/* 針對內容區塊列表的字體優化 (Wedding Info List) */
+section ul {
+    max-width: 600px; /* 限制內容寬度，讓卡片感更集中 */
+    margin: 0 auto;
+}
+
+section ul li {
+    display: flex;
+    flex-direction: column; /* 改為垂直排列 (Label 上, Value 下) */
+    align-items: center;    /* 置中對齊 */
+    justify-content: center;
+    padding: 1.5rem 0;      /* 增加上下呼吸空間 */
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2); /* 改為更優雅的金色細線 */
+    margin-bottom: 0;
+}
+
+section ul li:last-child {
+    border-bottom: none;
+}
+
+section ul li strong {
+    display: block;         /* 強制換行 */
+    font-size: 0.9rem;      /* 標籤縮小 */
+    color: #999;            /* 顏色變淡，作為襯托 */
+    text-transform: uppercase;
+    letter-spacing: 0.2em;  /* 拉大間距，極簡風格 */
+    font-family: var(--font-main); /* 使用無襯線體，與內文區隔 */
+    margin-bottom: 0.5rem;  /* 與下方內容保持距離 */
+    margin-right: 0;        /* 移除原本的右邊距 */
+}
+
+section ul li span, section ul li a {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 1.8rem;      /* 內容大幅放大 */
+    color: #333;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+}
+
+/* 特別針對地點連結優化 */
+section ul li a.wedding-location-link span {
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s;
+}
+
+section ul li a.wedding-location-link:hover span {
+    border-color: #d4af37;
+    color: #d4af37;
 }
 
 a {
