@@ -94,17 +94,36 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // 更新 About Us 背景圖片 (從 Google Drive 載入)
-        if (config.groom && config.groom.imageId) {
-            const groomUrl = `https://drive.google.com/thumbnail?id=${config.groom.imageId}&sz=w1200`;
-            document.querySelectorAll('.groom-bg').forEach(el => {
-                el.style.backgroundImage = `url('${groomUrl}')`;
-            });
+        // 若設定了 about.apiUrl，優先從 GAS API 取得新郎新娘的圖片 ID
+        function applyAboutImages(groomId, brideId) {
+            if (groomId && groomId !== "YOUR_GROOM_IMAGE_ID") {
+                const groomUrl = `https://drive.google.com/thumbnail?id=${groomId}&sz=w1200`;
+                document.querySelectorAll('.groom-bg').forEach(el => {
+                    el.style.backgroundImage = `url('${groomUrl}')`;
+                });
+            }
+            if (brideId && brideId !== "YOUR_BRIDE_IMAGE_ID") {
+                const brideUrl = `https://drive.google.com/thumbnail?id=${brideId}&sz=w1200`;
+                document.querySelectorAll('.bride-bg').forEach(el => {
+                    el.style.backgroundImage = `url('${brideUrl}')`;
+                });
+            }
         }
-        if (config.bride && config.bride.imageId) {
-            const brideUrl = `https://drive.google.com/thumbnail?id=${config.bride.imageId}&sz=w1200`;
-            document.querySelectorAll('.bride-bg').forEach(el => {
-                el.style.backgroundImage = `url('${brideUrl}')`;
-            });
+
+        if (config.about && config.about.apiUrl && config.about.apiUrl !== "YOUR_ABOUT_SCRIPT_URL") {
+            fetch(config.about.apiUrl, { method: 'GET', redirect: 'follow' })
+                .then(res => res.json())
+                .then(data => {
+                    const groomId = (data && data.groom) ? data.groom : (config.groom && config.groom.imageId);
+                    const brideId = (data && data.bride) ? data.bride : (config.bride && config.bride.imageId);
+                    applyAboutImages(groomId, brideId);
+                })
+                .catch(err => {
+                    console.error("Failed to load about images from API, falling back to config.", err);
+                    applyAboutImages(config.groom && config.groom.imageId, config.bride && config.bride.imageId);
+                });
+        } else {
+            applyAboutImages(config.groom && config.groom.imageId, config.bride && config.bride.imageId);
         }
 
         // 更新 Line 官方帳號資訊

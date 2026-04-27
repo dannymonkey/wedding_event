@@ -1,15 +1,24 @@
 // 全域設定檔 (Global Configuration)
 const config = {
+    about: {
+        // Google Apps Script API URL (About Page - Groom & Bride photos)
+        // 部署 src/about_gas.js 後，將取得的 URL 填入此處
+        // After deploying src/about_gas.js, paste the deployed URL here
+        apiUrl: "YOUR_ABOUT_SCRIPT_URL"
+    },
+
     groom: {
         name: "Danny",
         bio: "大家好，我是 Danny。這是我關於新郎的自我介紹...",
         // 請填入 Google Drive about 資料夾中新郎圖片的檔案 ID (Groom photo file ID from Drive/wedding/about/)
+        // 若設定了 about.apiUrl，此處 ID 將被 API 回傳的結果覆蓋
         imageId: "YOUR_GROOM_IMAGE_ID"
     },
     bride: {
         name: "Vivian",
         bio: "大家好，我是 Vivian。這是我關於新娘的自我介紹...",
         // 請填入 Google Drive about 資料夾中新娘圖片的檔案 ID (Bride photo file ID from Drive/wedding/about/)
+        // 若設定了 about.apiUrl，此處 ID 將被 API 回傳的結果覆蓋
         imageId: "YOUR_BRIDE_IMAGE_ID"
     },
     
