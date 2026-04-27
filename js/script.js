@@ -93,15 +93,17 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.bride-bio').forEach(el => el.textContent = config.bride.bio);
         }
 
-        // 更新 About Us 背景圖片
-        if (config.groom && config.groom.image) {
+        // 更新 About Us 背景圖片 (從 Google Drive 載入)
+        if (config.groom && config.groom.imageId) {
+            const groomUrl = `https://drive.google.com/thumbnail?id=${config.groom.imageId}&sz=w1200`;
             document.querySelectorAll('.groom-bg').forEach(el => {
-                el.style.backgroundImage = `url('${config.groom.image}')`;
+                el.style.backgroundImage = `url('${groomUrl}')`;
             });
         }
-        if (config.bride && config.bride.image) {
+        if (config.bride && config.bride.imageId) {
+            const brideUrl = `https://drive.google.com/thumbnail?id=${config.bride.imageId}&sz=w1200`;
             document.querySelectorAll('.bride-bg').forEach(el => {
-                el.style.backgroundImage = `url('${config.bride.image}')`;
+                el.style.backgroundImage = `url('${brideUrl}')`;
             });
         }
 

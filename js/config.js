@@ -3,12 +3,14 @@ const config = {
     groom: {
         name: "Danny",
         bio: "大家好，我是 Danny。這是我關於新郎的自我介紹...",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+        // 請填入 Google Drive about 資料夾中新郎圖片的檔案 ID (Groom photo file ID from Drive/wedding/about/)
+        imageId: "YOUR_GROOM_IMAGE_ID"
     },
     bride: {
         name: "Vivian",
         bio: "大家好，我是 Vivian。這是我關於新娘的自我介紹...",
-        image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+        // 請填入 Google Drive about 資料夾中新娘圖片的檔案 ID (Bride photo file ID from Drive/wedding/about/)
+        imageId: "YOUR_BRIDE_IMAGE_ID"
     },
     
     // 自動組合 coupleNames (例如: "Danny & Vivian")
