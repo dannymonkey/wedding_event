@@ -96,17 +96,24 @@ document.addEventListener('DOMContentLoaded', () => {
         // 更新 About Us 背景圖片 (從 Google Drive 載入)
         // 若設定了 about.apiUrl，優先從 GAS API 取得新郎新娘的圖片 ID
         function applyAboutImages(groomId, brideId) {
-            if (groomId && groomId !== "YOUR_GROOM_IMAGE_ID") {
-                const groomUrl = `https://drive.google.com/thumbnail?id=${groomId}&sz=w1200`;
-                document.querySelectorAll('.groom-bg').forEach(el => {
-                    el.style.backgroundImage = `url('${groomUrl}')`;
+            function setBgImg(selector, url) {
+                document.querySelectorAll(selector).forEach(el => {
+                    // 與 gallery 相同做法：用 <img referrerPolicy="no-referrer"> 取代 CSS background-image
+                    // 確保 Google Drive thumbnail 不因 Referer 被拒絕
+                    el.innerHTML = '';
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.referrerPolicy = 'no-referrer';
+                    img.alt = '';
+                    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;';
+                    el.appendChild(img);
                 });
             }
+            if (groomId && groomId !== "YOUR_GROOM_IMAGE_ID") {
+                setBgImg('.groom-bg', `https://drive.google.com/thumbnail?id=${groomId}&sz=w1200`);
+            }
             if (brideId && brideId !== "YOUR_BRIDE_IMAGE_ID") {
-                const brideUrl = `https://drive.google.com/thumbnail?id=${brideId}&sz=w1200`;
-                document.querySelectorAll('.bride-bg').forEach(el => {
-                    el.style.backgroundImage = `url('${brideUrl}')`;
-                });
+                setBgImg('.bride-bg', `https://drive.google.com/thumbnail?id=${brideId}&sz=w1200`);
             }
         }
 
