@@ -743,7 +743,7 @@ footer {
     }
     
     .about-card {
-        min-height: auto;
+        min-height: 50vh;
         padding: 3rem 2rem;
     }
 }
