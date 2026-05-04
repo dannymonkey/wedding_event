@@ -106,18 +106,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     const res = await fetch(config.about.apiUrl, { method: 'GET', redirect: 'follow' });
                     if (res.ok) {
                         const data = await res.json();
+                        console.log("[About] API response:", JSON.stringify(data));
                         if (Array.isArray(data) && data.length > 0) {
                             // 新格式：[groomId, brideId]
                             aboutImages = data;
                         } else if (data && (data.groom || data.bride)) {
                             // 舊格式相容：{groom: "id", bride: "id"}
                             aboutImages = [data.groom, data.bride].filter(Boolean);
+                        } else {
+                            console.warn("[About] API returned empty/unexpected data:", data);
                         }
+                    } else {
+                        console.error("[About] API HTTP error:", res.status, res.statusText);
                     }
                 } catch (err) {
-                    console.error("Failed to load about images from API, falling back to config.", err);
+                    console.error("[About] Failed to load images from API, falling back to config.", err);
                 }
             }
+            console.log("[About] Images to display:", aboutImages);
 
             function setBgImg(selector, id) {
                 document.querySelectorAll(selector).forEach(el => {
