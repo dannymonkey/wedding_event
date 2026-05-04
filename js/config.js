@@ -4,7 +4,7 @@ const config = {
         // Google Apps Script API URL (About Page - Groom & Bride photos)
         // 部署 src/about_gas.js 後，將取得的 URL 填入此處
         // After deploying src/about_gas.js, paste the deployed URL here
-        apiUrl: "https://script.google.com/macros/s/AKfycbz0im8sWCY_VmCnapXQY0ZDvZhVXfY1EiWujy_Z20nEnv4iFtFgiHKEbZ5xkcsB385zSg/exec",
+        apiUrl: "https://script.google.com/macros/s/AKfycbzQsdbJR-lF2QJK4oqYqT1Xpn9ZnVG9EOdcaCJzzhZiH3RLCuqxpyHVx06jYISLUgzhlQ/exec",
 
         // 手動填入照片 ID (若不使用 API，或 API 失敗時的備案)
         // 順序：第 1 個 = 新郎 (Groom)，第 2 個 = 新娘 (Bride)
