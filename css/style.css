@@ -699,6 +699,7 @@ footer {
     /* 將焦點對齊在圖片上方 20% 處 (通常為人像臉部位置)，比 center top 更適合人物 */
     background-position: center 20%; 
     background-repeat: no-repeat;
+    overflow: hidden; /* 確保 <img> 子元素不超出邊界 (搭配 hover scale 效果) */
     opacity: 0.4; /* 調整透明度 (0.4 = 40% 不透明) */
     transition: transform 0.5s ease;
     z-index: 0;

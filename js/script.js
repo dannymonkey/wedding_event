@@ -96,24 +96,38 @@ document.addEventListener('DOMContentLoaded', () => {
         // 更新 About Us 背景圖片 (從 Google Drive 載入)
         // 若設定了 about.apiUrl，優先從 GAS API 取得新郎新娘的圖片 ID
         function applyAboutImages(groomId, brideId) {
-            function setBgImg(selector, url) {
+            function setBgImg(selector, id) {
                 document.querySelectorAll(selector).forEach(el => {
-                    // 與 gallery 相同做法：用 <img referrerPolicy="no-referrer"> 取代 CSS background-image
-                    // 確保 Google Drive thumbnail 不因 Referer 被拒絕
                     el.innerHTML = '';
                     const img = document.createElement('img');
-                    img.src = url;
-                    img.referrerPolicy = 'no-referrer';
                     img.alt = '';
-                    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;';
+                    img.loading = 'eager';
+                    // 使用 top/left/right/bottom 代替 inset，相容 iOS 14.5 以前的 Safari
+                    img.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block;';
+                    // 嘗試多個 URL 格式：lh3 直接 CDN (最快) → thumbnail → uc export
+                    const urls = [
+                        `https://lh3.googleusercontent.com/d/${id}=w1200`,
+                        `https://drive.google.com/thumbnail?id=${id}&sz=w1200`,
+                        `https://drive.google.com/uc?export=view&id=${id}`
+                    ];
+                    let step = 0;
+                    img.src = urls[0];
+                    img.onerror = function() {
+                        step++;
+                        if (step < urls.length) {
+                            this.src = urls[step];
+                        } else {
+                            this.style.display = 'none';
+                        }
+                    };
                     el.appendChild(img);
                 });
             }
             if (groomId && groomId !== "YOUR_GROOM_IMAGE_ID") {
-                setBgImg('.groom-bg', `https://drive.google.com/thumbnail?id=${groomId}&sz=w1200`);
+                setBgImg('.groom-bg', groomId);
             }
             if (brideId && brideId !== "YOUR_BRIDE_IMAGE_ID") {
-                setBgImg('.bride-bg', `https://drive.google.com/thumbnail?id=${brideId}&sz=w1200`);
+                setBgImg('.bride-bg', brideId);
             }
         }
 
