@@ -62,7 +62,8 @@ const config = {
         // 電子喜帖圖片 (E-Invitation Images)
         // 請填入 Google Drive 檔案 ID (File IDs)
         invitationImages: [
-            "1yP_uDZx97sRtIM_QhG-Nh3ivMWjNfZ4g"
+            //"1yP_uDZx97sRtIM_QhG-Nh3ivMWjNfZ4g"
+            "1y8F2VlMfuvI-a2S1Du1zI604MjMAfTww"
             // "YOUR_IMAGE_ID_1", 
             // "YOUR_IMAGE_ID_2"
         ]
