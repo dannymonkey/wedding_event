@@ -693,7 +693,7 @@ footer {
     width: 100%;
     height: 100%;
     background-size: cover;
-    background-position: center;
+    background-position: center top;
     opacity: 0.4; /* 調整透明度 (0.4 = 40% 不透明) */
     transition: transform 0.5s ease;
     z-index: 0;
