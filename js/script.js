@@ -93,11 +93,29 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.bride-bio').forEach(el => el.textContent = config.bride.bio);
         }
 
-        // 更新 About Us 背景圖片 (從 Google Drive 載入)
-        // 優先順序：GAS API 回傳的 Drive ID > config.groom.imageId > config.groom.image (直接 URL)
-        function applyAboutImages(groomId, brideId) {
-            // 用 Drive file ID 設定背景圖片
-            function setBgImgById(selector, id) {
+        // 更新 About Us 背景圖片 — 與 gallery.js 完全相同的載入模式
+        // 優先順序：GAS API 陣列 > config.about.images 靜態陣列
+        // 陣列順序：第 1 個 = 新郎 (Groom)，第 2 個 = 新娘 (Bride)
+        (async () => {
+            let aboutImages = (config.about && config.about.images && config.about.images.length > 0)
+                ? config.about.images
+                : [];
+
+            if (config.about && config.about.apiUrl && config.about.apiUrl !== "YOUR_ABOUT_SCRIPT_URL") {
+                try {
+                    const res = await fetch(config.about.apiUrl, { method: 'GET', redirect: 'follow' });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (Array.isArray(data) && data.length > 0) {
+                            aboutImages = data;
+                        }
+                    }
+                } catch (err) {
+                    console.error("Failed to load about images from API, falling back to config.", err);
+                }
+            }
+
+            function setBgImg(selector, id) {
                 document.querySelectorAll(selector).forEach(el => {
                     el.innerHTML = '';
                     const img = document.createElement('img');
@@ -116,46 +134,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     el.appendChild(img);
                 });
             }
-            // 用直接 URL (非 Drive ID) 設定背景圖片
-            function setBgImgByUrl(selector, url) {
-                document.querySelectorAll(selector).forEach(el => {
-                    el.style.backgroundImage = `url('${url}')`;
-                });
-            }
 
-            const GROOM_PLACEHOLDER = "YOUR_GROOM_IMAGE_ID";
-            const BRIDE_PLACEHOLDER = "YOUR_BRIDE_IMAGE_ID";
-
-            if (groomId && groomId !== GROOM_PLACEHOLDER) {
-                setBgImgById('.groom-bg', groomId);
-            } else if (config.groom && config.groom.image) {
-                // Fallback：若沒有 Drive ID，改用 config.groom.image 直接 URL
-                setBgImgByUrl('.groom-bg', config.groom.image);
-            }
-
-            if (brideId && brideId !== BRIDE_PLACEHOLDER) {
-                setBgImgById('.bride-bg', brideId);
-            } else if (config.bride && config.bride.image) {
-                // Fallback：若沒有 Drive ID，改用 config.bride.image 直接 URL
-                setBgImgByUrl('.bride-bg', config.bride.image);
-            }
-        }
-
-        if (config.about && config.about.apiUrl && config.about.apiUrl !== "YOUR_ABOUT_SCRIPT_URL") {
-            fetch(config.about.apiUrl, { method: 'GET', redirect: 'follow' })
-                .then(res => res.json())
-                .then(data => {
-                    const groomId = (data && data.groom) ? data.groom : (config.groom && config.groom.imageId);
-                    const brideId = (data && data.bride) ? data.bride : (config.bride && config.bride.imageId);
-                    applyAboutImages(groomId, brideId);
-                })
-                .catch(err => {
-                    console.error("Failed to load about images from API, falling back to config.", err);
-                    applyAboutImages(config.groom && config.groom.imageId, config.bride && config.bride.imageId);
-                });
-        } else {
-            applyAboutImages(config.groom && config.groom.imageId, config.bride && config.bride.imageId);
-        }
+            if (aboutImages[0]) setBgImg('.groom-bg', aboutImages[0]);
+            if (aboutImages[1]) setBgImg('.bride-bg', aboutImages[1]);
+        })();
 
         // 更新 Line 官方帳號資訊
         if (config.line && config.line.url) {

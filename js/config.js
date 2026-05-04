@@ -4,26 +4,24 @@ const config = {
         // Google Apps Script API URL (About Page - Groom & Bride photos)
         // 部署 src/about_gas.js 後，將取得的 URL 填入此處
         // After deploying src/about_gas.js, paste the deployed URL here
-        apiUrl: "https://script.google.com/macros/s/AKfycbwLEVs0rEK8S7eaIQ4fHK4D_Pf4DRAAKc7ZiDw-ZU4UXvVqvPEnQISbD5j9CDMAUoWZ/exec"
+        apiUrl: "https://script.google.com/macros/s/AKfycbwLEVs0rEK8S7eaIQ4fHK4D_Pf4DRAAKc7ZiDw-ZU4UXvVqvPEnQISbD5j9CDMAUoWZ/exec",
+
+        // 手動填入照片 ID (若不使用 API，或 API 失敗時的備案)
+        // 順序：第 1 個 = 新郎 (Groom)，第 2 個 = 新娘 (Bride)
+        // 從 Drive 連結 https://drive.google.com/file/d/【ID在這裡】/view 取得 ID
+        images: [
+            // "YOUR_GROOM_IMAGE_ID",
+            // "YOUR_BRIDE_IMAGE_ID"
+        ]
     },
 
     groom: {
         name: "Danny",
         bio: "大家好，我是 Danny。這是我關於新郎的自我介紹...",
-        // 【About 頁面圖片設定 - 三選一】
-        // 方式 A（最簡單）：直接填入任何圖片網址 (e.g. Unsplash、imgur、直接 Drive 分享連結)
-        // image: "https://your-image-url.jpg",
-        // 方式 B：填入 Google Drive 檔案 ID (從 Drive 檔案連結取得)
-        // e.g. https://drive.google.com/file/d/【這裡就是 ID】/view
-        imageId: "YOUR_GROOM_IMAGE_ID",
-        // 方式 C（自動）：設定 about.apiUrl 讓 GAS 自動抓取資料夾中的照片 (見下方 about 設定)
     },
     bride: {
         name: "Vivian",
         bio: "大家好，我是 Vivian。這是我關於新娘的自我介紹...",
-        // 同上，三選一
-        // image: "https://your-image-url.jpg",
-        imageId: "YOUR_BRIDE_IMAGE_ID",
     },
     
     // 自動組合 coupleNames (例如: "Danny & Vivian")
