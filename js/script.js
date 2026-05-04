@@ -40,9 +40,12 @@ function loadGoogleDriveImages(containerId, imageIds) {
         
         img.onerror = function() {
             console.warn(`Image ${id} failed to load, trying fallback...`);
-            // Fallback: 嘗試直接連結
+            // Fallback 1: 嘗試直接連結
             if (this.src.includes('thumbnail')) {
-                    this.src = `https://drive.google.com/uc?export=view&id=${id}`;
+                this.src = `https://drive.google.com/uc?export=view&id=${id}`;
+            // Fallback 2: 嘗試 Google CDN 直接網址
+            } else if (this.src.includes('uc?export=view')) {
+                this.src = `https://lh3.googleusercontent.com/d/${id}`;
             } else {
                 this.style.display = 'none';
                 const errorMsg = document.createElement('p');

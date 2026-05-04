@@ -739,11 +739,12 @@ footer {
 @media (max-width: 768px) {
     .about-container {
         flex-direction: column;
+        min-height: auto;
     }
     
     .about-card {
-        min-height: 50vh;
-        padding: 2rem;
+        min-height: auto;
+        padding: 3rem 2rem;
     }
 }
 
