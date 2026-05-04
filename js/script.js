@@ -94,21 +94,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // 更新 About Us 背景圖片 (從 Google Drive 載入)
-        // 若設定了 about.apiUrl，優先從 GAS API 取得新郎新娘的圖片 ID
+        // 優先順序：GAS API 回傳的 Drive ID > config.groom.imageId > config.groom.image (直接 URL)
         function applyAboutImages(groomId, brideId) {
-            function setBgImg(selector, id) {
+            // 用 Drive file ID 設定背景圖片
+            function setBgImgById(selector, id) {
                 document.querySelectorAll(selector).forEach(el => {
                     el.innerHTML = '';
                     const img = document.createElement('img');
                     img.alt = '';
                     img.loading = 'eager';
-                    // 與 gallery 完全相同的載入方式：thumbnail URL + referrerPolicy no-referrer
                     img.src = `https://drive.google.com/thumbnail?id=${id}&sz=w1200`;
                     img.referrerPolicy = 'no-referrer';
-                    // 使用 top/left/right/bottom 代替 inset，相容 iOS 14.5 以前的 Safari
                     img.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block;';
                     img.onerror = function() {
-                        // Fallback：與 gallery 相同的 fallback 策略
                         if (this.src.includes('thumbnail')) {
                             this.src = `https://drive.google.com/uc?export=view&id=${id}`;
                         } else {
@@ -118,11 +116,28 @@ document.addEventListener('DOMContentLoaded', () => {
                     el.appendChild(img);
                 });
             }
-            if (groomId && groomId !== "YOUR_GROOM_IMAGE_ID") {
-                setBgImg('.groom-bg', groomId);
+            // 用直接 URL (非 Drive ID) 設定背景圖片
+            function setBgImgByUrl(selector, url) {
+                document.querySelectorAll(selector).forEach(el => {
+                    el.style.backgroundImage = `url('${url}')`;
+                });
             }
-            if (brideId && brideId !== "YOUR_BRIDE_IMAGE_ID") {
-                setBgImg('.bride-bg', brideId);
+
+            const GROOM_PLACEHOLDER = "YOUR_GROOM_IMAGE_ID";
+            const BRIDE_PLACEHOLDER = "YOUR_BRIDE_IMAGE_ID";
+
+            if (groomId && groomId !== GROOM_PLACEHOLDER) {
+                setBgImgById('.groom-bg', groomId);
+            } else if (config.groom && config.groom.image) {
+                // Fallback：若沒有 Drive ID，改用 config.groom.image 直接 URL
+                setBgImgByUrl('.groom-bg', config.groom.image);
+            }
+
+            if (brideId && brideId !== BRIDE_PLACEHOLDER) {
+                setBgImgById('.bride-bg', brideId);
+            } else if (config.bride && config.bride.image) {
+                // Fallback：若沒有 Drive ID，改用 config.bride.image 直接 URL
+                setBgImgByUrl('.bride-bg', config.bride.image);
             }
         }
 

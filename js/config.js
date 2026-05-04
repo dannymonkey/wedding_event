@@ -10,16 +10,20 @@ const config = {
     groom: {
         name: "Danny",
         bio: "大家好，我是 Danny。這是我關於新郎的自我介紹...",
-        // 請填入 Google Drive about 資料夾中新郎圖片的檔案 ID (Groom photo file ID from Drive/wedding/about/)
-        // 若設定了 about.apiUrl，此處 ID 將被 API 回傳的結果覆蓋
-        imageId: "YOUR_GROOM_IMAGE_ID"
+        // 【About 頁面圖片設定 - 三選一】
+        // 方式 A（最簡單）：直接填入任何圖片網址 (e.g. Unsplash、imgur、直接 Drive 分享連結)
+        // image: "https://your-image-url.jpg",
+        // 方式 B：填入 Google Drive 檔案 ID (從 Drive 檔案連結取得)
+        // e.g. https://drive.google.com/file/d/【這裡就是 ID】/view
+        imageId: "YOUR_GROOM_IMAGE_ID",
+        // 方式 C（自動）：設定 about.apiUrl 讓 GAS 自動抓取資料夾中的照片 (見下方 about 設定)
     },
     bride: {
         name: "Vivian",
         bio: "大家好，我是 Vivian。這是我關於新娘的自我介紹...",
-        // 請填入 Google Drive about 資料夾中新娘圖片的檔案 ID (Bride photo file ID from Drive/wedding/about/)
-        // 若設定了 about.apiUrl，此處 ID 將被 API 回傳的結果覆蓋
-        imageId: "YOUR_BRIDE_IMAGE_ID"
+        // 同上，三選一
+        // image: "https://your-image-url.jpg",
+        imageId: "YOUR_BRIDE_IMAGE_ID",
     },
     
     // 自動組合 coupleNames (例如: "Danny & Vivian")
