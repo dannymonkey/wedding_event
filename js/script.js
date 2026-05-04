@@ -126,22 +126,18 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("[About] Images to display:", aboutImages);
 
             function setBgImg(selector, id) {
+                // Use background-image instead of injecting <img> to avoid
+                // iOS Safari rendering bugs with position:absolute img inside
+                // overflow:hidden flex items. The .about-bg CSS already has
+                // background-size:cover and background-position set correctly.
+                const thumbUrl = `https://drive.google.com/thumbnail?id=${id}&sz=w1200`;
+                const fallbackUrl = `https://drive.google.com/uc?export=view&id=${id}`;
                 document.querySelectorAll(selector).forEach(el => {
-                    el.innerHTML = '';
-                    const img = document.createElement('img');
-                    img.alt = '';
-                    img.loading = 'eager';
-                    img.src = `https://drive.google.com/thumbnail?id=${id}&sz=w1200`;
-                    img.referrerPolicy = 'no-referrer';
-                    img.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block;';
-                    img.onerror = function() {
-                        if (this.src.includes('thumbnail')) {
-                            this.src = `https://drive.google.com/uc?export=view&id=${id}`;
-                        } else {
-                            this.style.display = 'none';
-                        }
-                    };
-                    el.appendChild(img);
+                    el.style.backgroundImage = `url("${thumbUrl}")`;
+                    // Probe load; if thumbnail fails, swap to direct export URL
+                    const probe = new Image();
+                    probe.onerror = () => { el.style.backgroundImage = `url("${fallbackUrl}")`; };
+                    probe.src = thumbUrl;
                 });
             }
 
