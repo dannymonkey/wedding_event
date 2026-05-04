@@ -102,20 +102,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     const img = document.createElement('img');
                     img.alt = '';
                     img.loading = 'eager';
+                    // 與 gallery 完全相同的載入方式：thumbnail URL + referrerPolicy no-referrer
+                    img.src = `https://drive.google.com/thumbnail?id=${id}&sz=w1200`;
+                    img.referrerPolicy = 'no-referrer';
                     // 使用 top/left/right/bottom 代替 inset，相容 iOS 14.5 以前的 Safari
                     img.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block;';
-                    // 嘗試多個 URL 格式：lh3 直接 CDN (最快) → thumbnail → uc export
-                    const urls = [
-                        `https://lh3.googleusercontent.com/d/${id}=w1200`,
-                        `https://drive.google.com/thumbnail?id=${id}&sz=w1200`,
-                        `https://drive.google.com/uc?export=view&id=${id}`
-                    ];
-                    let step = 0;
-                    img.src = urls[0];
                     img.onerror = function() {
-                        step++;
-                        if (step < urls.length) {
-                            this.src = urls[step];
+                        // Fallback：與 gallery 相同的 fallback 策略
+                        if (this.src.includes('thumbnail')) {
+                            this.src = `https://drive.google.com/uc?export=view&id=${id}`;
                         } else {
                             this.style.display = 'none';
                         }
