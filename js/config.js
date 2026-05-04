@@ -1,14 +1,25 @@
 // 全域設定檔 (Global Configuration)
 const config = {
+    about: {
+        // Google Apps Script API URL (About Page - Groom & Bride photos)
+        // 部署 src/about_gas.js 後，將取得的 URL 填入此處
+        // After deploying src/about_gas.js, paste the deployed URL here
+        apiUrl: "https://script.google.com/macros/s/AKfycbwLEVs0rEK8S7eaIQ4fHK4D_Pf4DRAAKc7ZiDw-ZU4UXvVqvPEnQISbD5j9CDMAUoWZ/exec"
+    },
+
     groom: {
         name: "Danny",
         bio: "大家好，我是 Danny。這是我關於新郎的自我介紹...",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+        // 請填入 Google Drive about 資料夾中新郎圖片的檔案 ID (Groom photo file ID from Drive/wedding/about/)
+        // 若設定了 about.apiUrl，此處 ID 將被 API 回傳的結果覆蓋
+        imageId: "YOUR_GROOM_IMAGE_ID"
     },
     bride: {
         name: "Vivian",
         bio: "大家好，我是 Vivian。這是我關於新娘的自我介紹...",
-        image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+        // 請填入 Google Drive about 資料夾中新娘圖片的檔案 ID (Bride photo file ID from Drive/wedding/about/)
+        // 若設定了 about.apiUrl，此處 ID 將被 API 回傳的結果覆蓋
+        imageId: "YOUR_BRIDE_IMAGE_ID"
     },
     
     // 自動組合 coupleNames (例如: "Danny & Vivian")
@@ -46,12 +57,13 @@ const config = {
 
     rsvp: {
         // Google Apps Script API URL (RSVP Check)
-        apiUrl: "https://script.google.com/macros/s/AKfycby8ExQzxXaVjA8QThNBzUTVT_AAgFhqUZ1lauR4VI4G90JUTcxFVm3pzNfpr64zh8n88g/exec",
+        apiUrl: "https://script.google.com/macros/s/AKfycby5mIjFTGWgES8borLTou8NI7bmStk0hd3p882wdT9n-T8nFX83IGu2fQ-hEHJbqpyOHQ/exec",
         formUrl: "https://docs.google.com/forms/d/e/1FAIpQLSeH0zboPi8YmVt5gppc2ASGOl4pCF_1HGrzCGJliUvtdj0ajQ/viewform?embedded=true",
         // 電子喜帖圖片 (E-Invitation Images)
         // 請填入 Google Drive 檔案 ID (File IDs)
         invitationImages: [
-            "1yP_uDZx97sRtIM_QhG-Nh3ivMWjNfZ4g"
+            //"1yP_uDZx97sRtIM_QhG-Nh3ivMWjNfZ4g"
+            "1y8F2VlMfuvI-a2S1Du1zI604MjMAfTww"
             // "YOUR_IMAGE_ID_1", 
             // "YOUR_IMAGE_ID_2"
         ]
