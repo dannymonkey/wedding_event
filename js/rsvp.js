@@ -58,12 +58,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             if (data.found) {
+                // 如果 API 有回傳客製化 message，就優先顯示 message，否則退回顯示原始狀態 (status)
+                const displayMessage = data.message ? data.message : `報名狀態：${data.status}`;
+                
                 resultDiv.innerHTML = `
                     <div class="result-card">
-                        <h3>${sanitizeHTML(query)}</h3>
-                        <p>報名狀態：</p>
-                        <div class="status-text">${sanitizeHTML(data.status)}</div>
-                        <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">(若有需要修改，請重新填寫表單即可)</p>
+                        <div class="status-text">${sanitizeHTML(displayMessage).replace(/\n/g, '<br>').replace(/\\n/g, '<br>')}</div>
+                        <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">(若有需要修改，請重新填寫表單即可，我們會以最新資料為準)</p>
                     </div>
                 `;
             } else {

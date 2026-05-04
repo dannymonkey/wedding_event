@@ -4,7 +4,7 @@ const config = {
         // Google Apps Script API URL (About Page - Groom & Bride photos)
         // 部署 src/about_gas.js 後，將取得的 URL 填入此處
         // After deploying src/about_gas.js, paste the deployed URL here
-        apiUrl: "YOUR_ABOUT_SCRIPT_URL"
+        apiUrl: "https://script.google.com/macros/s/AKfycbwLEVs0rEK8S7eaIQ4fHK4D_Pf4DRAAKc7ZiDw-ZU4UXvVqvPEnQISbD5j9CDMAUoWZ/exec"
     },
 
     groom: {
@@ -57,7 +57,7 @@ const config = {
 
     rsvp: {
         // Google Apps Script API URL (RSVP Check)
-        apiUrl: "https://script.google.com/macros/s/AKfycby8ExQzxXaVjA8QThNBzUTVT_AAgFhqUZ1lauR4VI4G90JUTcxFVm3pzNfpr64zh8n88g/exec",
+        apiUrl: "https://script.google.com/macros/s/AKfycby5mIjFTGWgES8borLTou8NI7bmStk0hd3p882wdT9n-T8nFX83IGu2fQ-hEHJbqpyOHQ/exec",
         formUrl: "https://docs.google.com/forms/d/e/1FAIpQLSeH0zboPi8YmVt5gppc2ASGOl4pCF_1HGrzCGJliUvtdj0ajQ/viewform?embedded=true",
         // 電子喜帖圖片 (E-Invitation Images)
         // 請填入 Google Drive 檔案 ID (File IDs)
