@@ -107,7 +107,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (res.ok) {
                         const data = await res.json();
                         if (Array.isArray(data) && data.length > 0) {
+                            // 新格式：[groomId, brideId]
                             aboutImages = data;
+                        } else if (data && (data.groom || data.bride)) {
+                            // 舊格式相容：{groom: "id", bride: "id"}
+                            aboutImages = [data.groom, data.bride].filter(Boolean);
                         }
                     }
                 } catch (err) {
