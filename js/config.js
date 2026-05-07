@@ -9,10 +9,7 @@ const config = {
         // 手動填入照片 ID (若不使用 API，或 API 失敗時的備案)
         // 順序：第 1 個 = 新郎 (Groom)，第 2 個 = 新娘 (Bride)
         // 從 Drive 連結 https://drive.google.com/file/d/【ID在這裡】/view 取得 ID
-        images: [
-            // "YOUR_GROOM_IMAGE_ID",
-            // "YOUR_BRIDE_IMAGE_ID"
-        ]
+        images: []
     },
 
     groom: {

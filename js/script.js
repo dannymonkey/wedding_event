@@ -39,18 +39,9 @@ function loadGoogleDriveImages(containerId, imageIds) {
         img.referrerPolicy = "no-referrer"; // 增加這行以減少參照檢查問題
         
         img.onerror = function() {
-            console.warn(`Image ${id} failed to load, trying fallback...`);
-            // Fallback: 嘗試直接連結
-            if (this.src.includes('thumbnail')) {
-                this.src = `https://drive.google.com/uc?export=view&id=${id}`;
-            } else {
-                this.style.display = 'none';
-                const errorMsg = document.createElement('p');
-                errorMsg.style.color = 'red';
-                errorMsg.style.textAlign = 'center';
-                errorMsg.innerHTML = `圖片載入失敗。<br><a href="https://drive.google.com/file/d/${id}/view" target="_blank">點此直接開啟圖片</a>`;
-                container.appendChild(errorMsg);
-            }
+            // uc?export=view 在跨域請求時 Google 一律回 403，不再 fallback
+            console.warn(`Image ${id} failed to load. Check Google Drive sharing settings.`);
+            this.style.display = 'none';
         };
 
         container.appendChild(img);
@@ -126,18 +117,31 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("[About] Images to display:", aboutImages);
 
             function setBgImg(selector, id) {
-                // Use background-image instead of injecting <img> to avoid
-                // iOS Safari rendering bugs with position:absolute img inside
-                // overflow:hidden flex items. The .about-bg CSS already has
-                // background-size:cover and background-position set correctly.
+                // Inject an <img> element directly instead of CSS background-image.
+                // CSS background-image re-fetches the URL independently and iOS Safari
+                // does not follow Google Drive redirects the same way <img> does,
+                // causing silent failures. Using <img> with object-fit:cover is
+                // reliable across all mobile browsers.
+                // The iOS Safari overflow:hidden clipping bug for position:absolute
+                // img inside flex containers is fixed via transform:translateZ(0)
+                // on .about-bg in the CSS.
                 const thumbUrl = `https://drive.google.com/thumbnail?id=${id}&sz=w1200`;
                 const fallbackUrl = `https://drive.google.com/uc?export=view&id=${id}`;
                 document.querySelectorAll(selector).forEach(el => {
-                    el.style.backgroundImage = `url("${thumbUrl}")`;
-                    // Probe load; if thumbnail fails, swap to direct export URL
-                    const probe = new Image();
-                    probe.onerror = () => { el.style.backgroundImage = `url("${fallbackUrl}")`; };
-                    probe.src = thumbUrl;
+                    el.innerHTML = ''; // clear any previous img
+                    const img = document.createElement('img');
+                    img.referrerPolicy = 'no-referrer';
+                    // 不使用 lazy loading：.about-bg 是 position:absolute + opacity:0.4，
+                    // iOS Safari 可能判斷為不可見而無限延遲載入
+                    img.alt = '';
+                    img.onerror = function() {
+                        // uc?export=view 在跨域請求時 Google 一律回 403，不再 fallback
+                        // 圖片無法顯示通常代表 Drive 分享權限未設為「知道連結的人都可以檢視」
+                        console.warn(`[About] Image ${id} failed to load. Check Google Drive sharing settings.`);
+                        this.style.display = 'none';
+                    };
+                    img.src = thumbUrl;
+                    el.appendChild(img);
                 });
             }
 
