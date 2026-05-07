@@ -4,22 +4,21 @@ const config = {
         // Google Apps Script API URL (About Page - Groom & Bride photos)
         // 部署 src/about_gas.js 後，將取得的 URL 填入此處
         // After deploying src/about_gas.js, paste the deployed URL here
-        apiUrl: "https://script.google.com/macros/s/AKfycbwLEVs0rEK8S7eaIQ4fHK4D_Pf4DRAAKc7ZiDw-ZU4UXvVqvPEnQISbD5j9CDMAUoWZ/exec"
+        apiUrl: "https://script.google.com/macros/s/AKfycbzQsdbJR-lF2QJK4oqYqT1Xpn9ZnVG9EOdcaCJzzhZiH3RLCuqxpyHVx06jYISLUgzhlQ/exec",
+
+        // 手動填入照片 ID (若不使用 API，或 API 失敗時的備案)
+        // 順序：第 1 個 = 新郎 (Groom)，第 2 個 = 新娘 (Bride)
+        // 從 Drive 連結 https://drive.google.com/file/d/【ID在這裡】/view 取得 ID
+        images: []
     },
 
     groom: {
         name: "Danny",
         bio: "大家好，我是 Danny。這是我關於新郎的自我介紹...",
-        // 請填入 Google Drive about 資料夾中新郎圖片的檔案 ID (Groom photo file ID from Drive/wedding/about/)
-        // 若設定了 about.apiUrl，此處 ID 將被 API 回傳的結果覆蓋
-        imageId: "YOUR_GROOM_IMAGE_ID"
     },
     bride: {
         name: "Vivian",
         bio: "大家好，我是 Vivian。這是我關於新娘的自我介紹...",
-        // 請填入 Google Drive about 資料夾中新娘圖片的檔案 ID (Bride photo file ID from Drive/wedding/about/)
-        // 若設定了 about.apiUrl，此處 ID 將被 API 回傳的結果覆蓋
-        imageId: "YOUR_BRIDE_IMAGE_ID"
     },
     
     // 自動組合 coupleNames (例如: "Danny & Vivian")

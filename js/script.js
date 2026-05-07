@@ -39,18 +39,9 @@ function loadGoogleDriveImages(containerId, imageIds) {
         img.referrerPolicy = "no-referrer"; // 增加這行以減少參照檢查問題
         
         img.onerror = function() {
-            console.warn(`Image ${id} failed to load, trying fallback...`);
-            // Fallback: 嘗試直接連結
-            if (this.src.includes('thumbnail')) {
-                    this.src = `https://drive.google.com/uc?export=view&id=${id}`;
-            } else {
-                this.style.display = 'none';
-                const errorMsg = document.createElement('p');
-                errorMsg.style.color = 'red';
-                errorMsg.style.textAlign = 'center';
-                errorMsg.innerHTML = `圖片載入失敗。<br><a href="https://drive.google.com/file/d/${id}/view" target="_blank">點此直接開啟圖片</a>`;
-                container.appendChild(errorMsg);
-            }
+            // uc?export=view 在跨域請求時 Google 一律回 403，不再 fallback
+            console.warn(`Image ${id} failed to load. Check Google Drive sharing settings.`);
+            this.style.display = 'none';
         };
 
         container.appendChild(img);
@@ -93,38 +84,70 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.bride-bio').forEach(el => el.textContent = config.bride.bio);
         }
 
-        // 更新 About Us 背景圖片 (從 Google Drive 載入)
-        // 若設定了 about.apiUrl，優先從 GAS API 取得新郎新娘的圖片 ID
-        function applyAboutImages(groomId, brideId) {
-            if (groomId && groomId !== "YOUR_GROOM_IMAGE_ID") {
-                const groomUrl = `https://drive.google.com/thumbnail?id=${groomId}&sz=w1200`;
-                document.querySelectorAll('.groom-bg').forEach(el => {
-                    el.style.backgroundImage = `url('${groomUrl}')`;
-                });
-            }
-            if (brideId && brideId !== "YOUR_BRIDE_IMAGE_ID") {
-                const brideUrl = `https://drive.google.com/thumbnail?id=${brideId}&sz=w1200`;
-                document.querySelectorAll('.bride-bg').forEach(el => {
-                    el.style.backgroundImage = `url('${brideUrl}')`;
-                });
-            }
-        }
+        // 更新 About Us 背景圖片 — 與 gallery.js 完全相同的載入模式
+        // 優先順序：GAS API 陣列 > config.about.images 靜態陣列
+        // 陣列順序：第 1 個 = 新郎 (Groom)，第 2 個 = 新娘 (Bride)
+        (async () => {
+            let aboutImages = (config.about && config.about.images && config.about.images.length > 0)
+                ? config.about.images
+                : [];
 
-        if (config.about && config.about.apiUrl && config.about.apiUrl !== "YOUR_ABOUT_SCRIPT_URL") {
-            fetch(config.about.apiUrl, { method: 'GET', redirect: 'follow' })
-                .then(res => res.json())
-                .then(data => {
-                    const groomId = (data && data.groom) ? data.groom : (config.groom && config.groom.imageId);
-                    const brideId = (data && data.bride) ? data.bride : (config.bride && config.bride.imageId);
-                    applyAboutImages(groomId, brideId);
-                })
-                .catch(err => {
-                    console.error("Failed to load about images from API, falling back to config.", err);
-                    applyAboutImages(config.groom && config.groom.imageId, config.bride && config.bride.imageId);
+            if (config.about && config.about.apiUrl && config.about.apiUrl !== "YOUR_ABOUT_SCRIPT_URL") {
+                try {
+                    const res = await fetch(config.about.apiUrl, { method: 'GET', redirect: 'follow' });
+                    if (res.ok) {
+                        const data = await res.json();
+                        console.log("[About] API response:", JSON.stringify(data));
+                        if (Array.isArray(data) && data.length > 0) {
+                            // 新格式：[groomId, brideId]
+                            aboutImages = data;
+                        } else if (data && (data.groom || data.bride)) {
+                            // 舊格式相容：{groom: "id", bride: "id"}
+                            aboutImages = [data.groom, data.bride].filter(Boolean);
+                        } else {
+                            console.warn("[About] API returned empty/unexpected data:", data);
+                        }
+                    } else {
+                        console.error("[About] API HTTP error:", res.status, res.statusText);
+                    }
+                } catch (err) {
+                    console.error("[About] Failed to load images from API, falling back to config.", err);
+                }
+            }
+            console.log("[About] Images to display:", aboutImages);
+
+            function setBgImg(selector, id) {
+                // Inject an <img> element directly instead of CSS background-image.
+                // CSS background-image re-fetches the URL independently and iOS Safari
+                // does not follow Google Drive redirects the same way <img> does,
+                // causing silent failures. Using <img> with object-fit:cover is
+                // reliable across all mobile browsers.
+                // The iOS Safari overflow:hidden clipping bug for position:absolute
+                // img inside flex containers is fixed via transform:translateZ(0)
+                // on .about-bg in the CSS.
+                const thumbUrl = `https://drive.google.com/thumbnail?id=${id}&sz=w1200`;
+                const fallbackUrl = `https://drive.google.com/uc?export=view&id=${id}`;
+                document.querySelectorAll(selector).forEach(el => {
+                    el.innerHTML = ''; // clear any previous img
+                    const img = document.createElement('img');
+                    img.referrerPolicy = 'no-referrer';
+                    // 不使用 lazy loading：.about-bg 是 position:absolute + opacity:0.4，
+                    // iOS Safari 可能判斷為不可見而無限延遲載入
+                    img.alt = '';
+                    img.onerror = function() {
+                        // uc?export=view 在跨域請求時 Google 一律回 403，不再 fallback
+                        // 圖片無法顯示通常代表 Drive 分享權限未設為「知道連結的人都可以檢視」
+                        console.warn(`[About] Image ${id} failed to load. Check Google Drive sharing settings.`);
+                        this.style.display = 'none';
+                    };
+                    img.src = thumbUrl;
+                    el.appendChild(img);
                 });
-        } else {
-            applyAboutImages(config.groom && config.groom.imageId, config.bride && config.bride.imageId);
-        }
+            }
+
+            if (aboutImages[0]) setBgImg('.groom-bg', aboutImages[0]);
+            if (aboutImages[1]) setBgImg('.bride-bg', aboutImages[1]);
+        })();
 
         // 更新 Line 官方帳號資訊
         if (config.line && config.line.url) {
