@@ -582,6 +582,221 @@ footer {
 }
 
 /* ===================================================
+   雙人相片海報樣式 (Couple Photo Poster)
+   =================================================== */
+.couple-poster {
+    background-color: #E5ECF6;
+    color: #3E5475;
+    width: 100%;
+    max-width: 700px;
+    aspect-ratio: 1 / 1.2;
+    box-shadow: 0 20px 50px rgba(27, 54, 93, 0.2);
+    border-radius: 1rem;
+    position: relative;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+/* SVG 裝飾 */
+.poster-deco-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 18rem;
+    height: 18rem;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* Grid 佈局 */
+.poster-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    position: relative;
+    z-index: 10;
+    flex-grow: 1;
+    height: 100%;
+}
+
+.poster-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 90%;
+    align-self: center;
+}
+
+.poster-col-left {
+    padding-right: 0.5rem;
+}
+
+.poster-col-right {
+    padding-left: 0.5rem;
+}
+
+/* 標籤與名字 */
+.poster-label-box {
+    padding: 0.75rem 1rem;
+}
+
+.poster-col-left .poster-label-box {
+    text-align: left;
+}
+
+.poster-col-right .poster-label-box {
+    text-align: left;
+    padding-left: 1.5rem;
+}
+
+.poster-label-en {
+    font-family: monospace;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    opacity: 0.75;
+    margin-bottom: 0.25rem;
+}
+
+.poster-name-box {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.poster-name-tc {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.75rem;
+    font-weight: 500;
+}
+
+.poster-name-en {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3.5rem;
+    opacity: 0.9;
+    color: rgba(27, 54, 93, 0.9);
+}
+
+/* 照片容器 */
+.poster-photo-wrap {
+    width: 100%;
+    aspect-ratio: 3.5 / 5;
+    position: relative;
+}
+
+.poster-photo {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* 有機相框 */
+.organic-frame-1 {
+    border-radius: 43% 57% 42% 58% / 58% 44% 56% 42%;
+    transform: rotate(-1.5deg);
+}
+
+.organic-frame-2 {
+    border-radius: 53% 47% 48% 52% / 52% 54% 46% 48%;
+    transform: rotate(1deg);
+}
+
+/* 照片裁剪 - 由 config.js 動態設定 */
+.bride-photo {
+    background-image: url(''); /* 由 JS 設定 */
+    background-size: cover;
+    background-position: center top;
+}
+
+.groom-photo {
+    background-image: url(''); /* 由 JS 設定 */
+    background-size: cover;
+    background-position: 40% 30%;
+}
+
+/* 手機版響應式 */
+@media (max-width: 640px) {
+    .couple-poster {
+        max-width: 95%;
+        aspect-ratio: auto;
+        min-height: 100vh;
+        padding: 2rem 1.5rem;
+    }
+    
+    .poster-deco-svg {
+        width: 12rem;
+        height: 12rem;
+    }
+    
+    .poster-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        height: auto;
+    }
+    
+    .poster-col {
+        height: auto;
+        padding: 0 !important;
+        gap: 1rem;
+    }
+    
+    /* 重新排序：新娘區塊完整在上，新郎區塊完整在下 */
+    .poster-col-left {
+        display: contents;
+    }
+    
+    .poster-col-right {
+        display: contents;
+    }
+    
+    .poster-col-left .poster-label-box {
+        order: 1;
+    }
+    
+    .poster-col-right .poster-photo-wrap {
+        order: 2;
+    }
+    
+    .poster-col-right .poster-label-box {
+        order: 3;
+    }
+    
+    .poster-col-left .poster-photo-wrap {
+        order: 4;
+    }
+    
+    .poster-label-box {
+        padding: 0.5rem 1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .poster-col-right .poster-label-box {
+        padding-left: 1rem;
+    }
+    
+    .poster-photo-wrap {
+        aspect-ratio: 3 / 4;
+        max-width: 75%;
+        margin: 0 auto 1.5rem auto;
+    }
+    
+    .poster-name-tc {
+        font-size: 1.5rem;
+    }
+    
+    .poster-name-en {
+        font-size: 3rem;
+    }
+}
+
+/* ===================================================
    電子喜帖卡片 (E-Invitation Calendar Card)
    =================================================== */
 .invitation-wrapper {

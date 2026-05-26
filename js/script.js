@@ -145,8 +145,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
 
-            if (aboutImages[0]) setBgImg('.groom-bg', aboutImages[0]);
-            if (aboutImages[1]) setBgImg('.bride-bg', aboutImages[1]);
+            if (aboutImages[0]) {
+                setBgImg('.groom-bg', aboutImages[0]);
+                // 新增：設定到雙人海報的 groom-photo
+                document.querySelectorAll('.groom-photo').forEach(el => {
+                    el.style.backgroundImage = `url('https://drive.google.com/thumbnail?id=${aboutImages[0]}&sz=w1200')`;
+                });
+            }
+            if (aboutImages[1]) {
+                setBgImg('.bride-bg', aboutImages[1]);
+                // 新增：設定到雙人海報的 bride-photo
+                document.querySelectorAll('.bride-photo').forEach(el => {
+                    el.style.backgroundImage = `url('https://drive.google.com/thumbnail?id=${aboutImages[1]}&sz=w1200')`;
+                });
+            }
         })();
 
         // 更新 Line 官方帳號資訊
