@@ -14,10 +14,12 @@ const config = {
 
     groom: {
         name: "Danny",
+        tw_name: "東濬", 
         bio: "大家好，我是 Danny。這是我關於新郎的自我介紹...",
     },
     bride: {
         name: "Vivian",
+        tw_name: "俞萱",
         bio: "大家好，我是 Vivian。這是我關於新娘的自我介紹...",
     },
     

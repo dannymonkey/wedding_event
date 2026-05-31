@@ -581,6 +581,494 @@ footer {
     border-radius: 8px;
 }
 
+/* ===================================================
+   雙人相片海報樣式 (Couple Photo Poster)
+   =================================================== */
+.couple-poster {
+    background-color: #E5ECF6;
+    color: #3E5475;
+    width: 100%;
+    max-width: 700px;
+    aspect-ratio: 1 / 1.2;
+    box-shadow: 0 20px 50px rgba(27, 54, 93, 0.2);
+    border-radius: 1rem;
+    position: relative;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+/* SVG 裝飾 */
+.poster-deco-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 18rem;
+    height: 18rem;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* Grid 佈局 */
+.poster-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    position: relative;
+    z-index: 10;
+    flex-grow: 1;
+    height: 100%;
+}
+
+.poster-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 90%;
+    align-self: center;
+}
+
+.poster-col-left {
+    padding-right: 0.5rem;
+}
+
+.poster-col-right {
+    padding-left: 0.5rem;
+}
+
+/* 標籤與名字 */
+.poster-label-box {
+    padding: 0.75rem 1rem;
+}
+
+.poster-col-left .poster-label-box {
+    text-align: left;
+}
+
+.poster-col-right .poster-label-box {
+    text-align: left;
+    padding-left: 1.5rem;
+}
+
+.poster-label-en {
+    font-family: monospace;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    opacity: 0.75;
+    margin-bottom: 0.25rem;
+}
+
+.poster-name-box {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.poster-name-tc {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.75rem;
+    font-weight: 500;
+}
+
+.poster-name-en {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3.5rem;
+    opacity: 0.9;
+    color: rgba(27, 54, 93, 0.9);
+}
+
+/* 照片容器 */
+.poster-photo-wrap {
+    width: 100%;
+    aspect-ratio: 3.5 / 5;
+    position: relative;
+}
+
+.poster-photo {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* 有機相框 */
+.organic-frame-1 {
+    border-radius: 43% 57% 42% 58% / 58% 44% 56% 42%;
+    transform: rotate(-1.5deg);
+}
+
+.organic-frame-2 {
+    border-radius: 53% 47% 48% 52% / 52% 54% 46% 48%;
+    transform: rotate(1deg);
+}
+
+/* 照片裁剪 - 由 config.js 動態設定 */
+.bride-photo {
+    background-image: url(''); /* 由 JS 設定 */
+    background-size: cover;
+    background-position: center top;
+}
+
+.groom-photo {
+    background-image: url(''); /* 由 JS 設定 */
+    background-size: cover;
+    background-position: 40% 30%;
+}
+
+/* 手機版響應式 */
+@media (max-width: 640px) {
+    .couple-poster {
+        max-width: 95%;
+        aspect-ratio: auto;
+        min-height: 100vh;
+        padding: 2rem 1.5rem;
+    }
+    
+    .poster-deco-svg {
+        width: 12rem;
+        height: 12rem;
+    }
+    
+    .poster-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        height: auto;
+    }
+    
+    .poster-col {
+        height: auto;
+        padding: 0 !important;
+        gap: 1rem;
+    }
+    
+    /* 重新排序：新娘區塊完整在上，新郎區塊完整在下 */
+    .poster-col-left {
+        display: contents;
+    }
+    
+    .poster-col-right {
+        display: contents;
+    }
+    
+    .poster-col-left .poster-label-box {
+        order: 1;
+    }
+    
+    .poster-col-right .poster-photo-wrap {
+        order: 2;
+    }
+    
+    .poster-col-right .poster-label-box {
+        order: 3;
+    }
+    
+    .poster-col-left .poster-photo-wrap {
+        order: 4;
+    }
+    
+    .poster-label-box {
+        padding: 0.5rem 1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .poster-col-right .poster-label-box {
+        padding-left: 1rem;
+    }
+    
+    .poster-photo-wrap {
+        aspect-ratio: 3 / 4;
+        max-width: 75%;
+        margin: 0 auto 1.5rem auto;
+    }
+    
+    .poster-name-tc {
+        font-size: 1.5rem;
+    }
+    
+    .poster-name-en {
+        font-size: 3rem;
+    }
+}
+
+/* ===================================================
+   電子喜帖卡片 (E-Invitation Calendar Card)
+   =================================================== */
+.invitation-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0;
+}
+
+.inv-card {
+    background: linear-gradient(180deg, #C5D8E6 0%, #D9E5EE 100%);
+    border-radius: 2rem;
+    padding: 1.5rem 1.5rem 1.2rem;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(52, 82, 110, 0.15);
+    color: #34526E;
+    text-align: center;
+}
+
+/* 植物線稿裝飾 */
+.inv-botanical-left {
+    position: absolute;
+    top: 20px;
+    left: 0px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.inv-botanical-right {
+    position: absolute;
+    top: 10px;
+    right: 5px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* 頂部愛心 */
+.inv-top-heart {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 0.6rem;
+    position: relative;
+    z-index: 2;
+    letter-spacing: 8px;
+}
+
+/* 三聯拱形照片容器 */
+.inv-arches-wrap {
+    width: 100%;
+    margin: 0 auto;
+    z-index: 2;
+    line-height: 0;
+}
+
+.inv-photo-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* 年份徽章 */
+/* .inv-year-badge is now rendered as SVG elements inside .inv-photo-svg */
+
+/* 分隔線 */
+.inv-hr {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.3);
+    margin: 1.4rem 0 0.8rem;
+}
+
+/* 日曆 + 誓詞 垂直居中排列 */
+.inv-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+/* 日曆區塊 */
+.inv-calendar {
+    width: 100%;
+    max-width: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.inv-month-label {
+    font-family: var(--font-main);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    color: #3d5e77;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.inv-cal-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.65rem;
+    color: #3d5e77;
+    margin: 0 auto;
+}
+
+.inv-cal-table th {
+    font-weight: 500;
+    color: rgba(61, 94, 119, 0.65);
+    padding: 2px 1px;
+    text-align: center;
+    font-size: 0.58rem;
+    letter-spacing: 0.5px;
+}
+
+.inv-cal-table td {
+    padding: 3px 1px;
+    text-align: center;
+    line-height: 1;
+}
+
+.inv-today-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid #3d5e77;
+    font-weight: 700;
+    font-size: 0.65rem;
+}
+
+/* 誓詞區塊 */
+.inv-vows {
+    width: 100%;
+    max-width: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.inv-forever {
+    font-family: var(--font-main);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: #3d5e77;
+    margin-bottom: 0.7rem;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.inv-vows ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.inv-vows li {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.68rem;
+    color: #3d5e77;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.35);
+    font-family: 'Noto Serif TC', serif;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.inv-vows li:last-child {
+    border-bottom: none;
+}
+
+.inv-heart {
+    position: absolute;
+    right: 0;
+    color: rgba(61, 94, 119, 0.6);
+    font-size: 0.65rem;
+    flex-shrink: 0;
+}
+
+/* 底部裝飾文字 */
+.inv-footer {
+    margin-top: 1rem;
+    padding-top: 0.2rem;
+    text-align: center;
+}
+
+.inv-footer-line1 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.75rem;
+    color: #3d5e77;
+    margin: 0.4rem 0 0.2rem;
+    letter-spacing: 1px;
+}
+
+.inv-footer-line2 {
+    font-family: var(--font-serif);
+    font-size: 0.78rem;
+    font-style: italic;
+    color: rgba(61, 94, 119, 0.8);
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+/* 響應式調整 */
+@media (max-width: 480px) {
+    .inv-card {
+        padding: 1.2rem 1rem 1rem;
+    }
+    .inv-arches-wrap {
+        max-width: 310px;
+    }
+    .inv-year-badge {
+        width: 80px;
+        height: 80px;
+        font-size: 1.4rem;
+        margin-top: -40px;
+    }
+    .inv-body {
+        gap: 1rem;
+    }
+    .inv-calendar {
+        max-width: 240px;
+    }
+    .inv-month-label {
+        font-size: 0.7rem;
+        margin-bottom: 0.6rem;
+    }
+    .inv-cal-table {
+        font-size: 0.7rem;
+    }
+    .inv-cal-table th {
+        font-size: 0.62rem;
+        padding: 3px 2px;
+    }
+    .inv-cal-table td {
+        padding: 5px 2px;
+    }
+    .inv-today-circle {
+        width: 22px;
+        height: 22px;
+        font-size: 0.7rem;
+    }
+    .inv-vows {
+        max-width: 240px;
+    }
+    .inv-forever {
+        font-size: 0.7rem;
+    }
+    .inv-vows li {
+        font-size: 0.7rem;
+        padding: 5px 0;
+    }
+    .inv-vows li span:first-child {
+        font-size: 0.7rem;
+    }
+    .inv-heart {
+        font-size: 0.7rem;
+    }
+}
+
 /* 響應式設計 */
 @media (max-width: 1024px) {
     nav {
