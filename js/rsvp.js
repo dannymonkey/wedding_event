@@ -116,7 +116,6 @@ function renderInvitationCard(containerId, imageIds) {
                     <line x1="98" y1="9" x2="160" y2="9" stroke="rgba(255,255,255,0.55)" stroke-width="1"/>
                 </svg>
                 <p class="inv-footer-line1">謝謝你，讓我成為最幸福的人</p>
-                <p class="inv-footer-line2">— 我愛你 —</p>
             </div>
         </div>
     `;

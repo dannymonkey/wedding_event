@@ -71,6 +71,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // 更新新郎資訊
         if (config.groom && config.groom.name) {
             document.querySelectorAll('.groom-name').forEach(el => el.textContent = config.groom.name);
+            document.querySelectorAll('.groom-en-name').forEach(el => el.textContent = config.groom.name);
+        }
+        if (config.groom && config.groom.tw_name) {
+            document.querySelectorAll('.groom-tw-name').forEach(el => el.textContent = config.groom.tw_name);
         }
         if (config.groom && config.groom.bio) {
             document.querySelectorAll('.groom-bio').forEach(el => el.textContent = config.groom.bio);
@@ -79,6 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // 更新新娘資訊
         if (config.bride && config.bride.name) {
             document.querySelectorAll('.bride-name').forEach(el => el.textContent = config.bride.name);
+            document.querySelectorAll('.bride-en-name').forEach(el => el.textContent = config.bride.name);
+        }
+        if (config.bride && config.bride.tw_name) {
+            document.querySelectorAll('.bride-tw-name').forEach(el => el.textContent = config.bride.tw_name);
         }
         if (config.bride && config.bride.bio) {
             document.querySelectorAll('.bride-bio').forEach(el => el.textContent = config.bride.bio);
