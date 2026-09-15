@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const passengerName = "貴賓 (GUEST)";
                 const seatNumber = "VIP";
                 
-                resultDiv.innerHTML = renderBoardingPassHTML(passengerName, seatNumber, flightCode, dateStr, timeStr, gateStr);
+                resultDiv.innerHTML = renderBoardingPassHTML(passengerName, seatNumber, "", flightCode, dateStr, timeStr, gateStr);
                 // Generate Barcode
                 generateBPBarcode(`${flightCode}-${seatNumber}`);
                 // Setup Download Button
@@ -89,14 +89,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             if (data.found) {
-                // Generate Boarding Pass HTML - Logic Updated to match css/style.css
-                const passengerName = sanitizeHTML(query.toUpperCase());
-                const seatNumber = sanitizeHTML(data.table);
-                
-                resultDiv.innerHTML = renderBoardingPassHTML(passengerName, seatNumber, flightCode, dateStr, timeStr, gateStr);
-                // Generate Barcode
-                generateBPBarcode(`${flightCode}-${seatNumber}`);
-                // Setup Download Button
+                const guestName = (data.guest && data.guest.trim()) ? data.guest.trim() : query;
+                const tbNumber = data.tb_number || data.table || "";
+                const tbName = data.tb_name || "";
+
+                const passengerName = sanitizeHTML(guestName.toUpperCase());
+                const seatNumberLabel = sanitizeHTML(tbNumber);
+                const seatNameLabel = sanitizeHTML(tbName);
+
+                resultDiv.innerHTML = renderBoardingPassHTML(passengerName, seatNumberLabel, seatNameLabel, flightCode, dateStr, timeStr, gateStr);
+                // CODE128 不支援中文，barcode 只用桌號（ASCII），避免桌名含中文導致產生失敗
+                generateBPBarcode(`${flightCode}-${tbNumber}`);
                 setupDownloadButton(`BoardingPass_${passengerName}.png`);
             } else {
                 resultDiv.innerHTML = `<p>找不到 "<strong>${sanitizeHTML(query)}</strong>" 的桌位資訊。<br>請確認輸入正確，或直接聯繫新人。</p>`;
@@ -108,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function renderBoardingPassHTML(passengerName, seatNumber, flightCode, dateStr, timeStr, gateStr) {
+    function renderBoardingPassHTML(passengerName, seatNumber, seatName, flightCode, dateStr, timeStr, gateStr) {
         return `
             <div id="bp-container" style="padding: 10px; background-color: transparent;"> <!-- Container for capture -->
                 <div class="boarding-pass-result animate-in">
@@ -165,7 +168,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         
                         <div class="bp-seat-large">
                             <label>SEAT NO.</label>
-                            <span>${seatNumber}</span>
+                            <span class="bp-seat-number">${seatNumber}</span>
+                            ${seatName ? `<span class="bp-seat-table-name">${seatName}</span>` : ''}
                         </div>
 
                         <img class="bp-barcode" />

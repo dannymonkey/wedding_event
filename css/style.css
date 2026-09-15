@@ -1536,6 +1536,20 @@ footer {
     color: var(--color-navy);
 }
 
+.bp-seat-large .bp-seat-number {
+    display: block;
+    white-space: nowrap;
+}
+
+.bp-seat-large .bp-seat-table-name {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+}
+
 .bp-barcode {
     width: 100%;
     height: auto;
