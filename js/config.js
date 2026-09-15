@@ -73,6 +73,7 @@ const config = {
     seating: {
         // 桌位表圖片 (Seating Chart Images)
         // 若有桌位表圖片，請填入 Google Drive 檔案 ID
+        apiUrl: "https://script.google.com/macros/s/AKfycbxQIk_dRns4L7fzu9SlMy05AvyJtazu5JA6MEler3zDhYYGzs0Eb6Bkkai3vjNaZZGt/exec",
         chartImages: [
             // "YOUR_SEATING_CHART_IMAGE_ID"
         ]
