@@ -1,6 +1,11 @@
 // 快取設定：避免每次查詢都重新讀整張 Google Sheet，大幅縮短回應時間
 var CACHE_KEY = "seatingMap_v1";
-var CACHE_TTL_SECONDS = 300; // 5 分鐘，期間內若有異動座位表請等快取過期或手動清除
+var CACHE_TTL_SECONDS = 21600; // 6 小時（CacheService 上限），實際異動由 onEdit 觸發即時清快取
+
+// 簡易觸發器：手動編輯 Google Sheet 時自動清除快取，讓下次查詢立即反映最新座位資料
+function onEdit(e) {
+  clearSeatingCache();
+}
 
 function doGet(e) {
   var query = (e && e.parameter && e.parameter.query) ? e.parameter.query.toString().trim() : "";
